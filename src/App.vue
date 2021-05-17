@@ -1,22 +1,24 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-     <router-view></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 // import axios from "axios";
 // import jsonp from "jsonp";
+import storage from "./storage";
 export default {
   name: "App",
-  components: {
-  },
+  components: {},
   dat() {
-    return {
-    };
+    return {};
   },
   mounted() {
+    storage.setItem("amounts", 20, "user");
+    //storage.getStorage();
+    //storage.clear("gender","user")
   },
 };
 </script>
