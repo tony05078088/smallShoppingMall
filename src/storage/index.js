@@ -34,6 +34,7 @@ export default {
   clear(key, module_name) {
     let val = this.getStorage();
     if (module_name) {
+      if (val[module_name]) return;
       //選到有moduule裡的有指定的值然後把它砍掉
       delete val[module_name][key];
     } else {

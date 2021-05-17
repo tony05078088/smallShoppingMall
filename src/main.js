@@ -1,13 +1,17 @@
 import axios from "axios";
 import Vue from "vue";
 import App from "./App.vue";
+import env from "./env";
 import router from "./router";
 // 掛載axios到vue實例上
 Vue.prototype.axios = axios;
-
 //根據前端跨域方式做調整 Ex: /a/b  :  /api/a/b => /a/b
 axios.defaults.baseURL = "/api";
-axios.defaults.timeout = 8000
+axios.defaults.timeout = 8000;
+
+// 根據環境變量不同獲取不同的請求地址
+axios.defaults.baseURL = env.baseURL;
+console.log(env.baseURL);
 //axios 接口錯誤攔截器
 axios.interceptors.response.use(response => {
   let res = response.data;
