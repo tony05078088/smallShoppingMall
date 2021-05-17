@@ -8,17 +8,32 @@
 <script>
 // import axios from "axios";
 // import jsonp from "jsonp";
-import storage from "./storage";
+//import storage from "./storage";
 export default {
   name: "App",
   components: {},
-  dat() {
-    return {};
+  data() {
+    return {
+      response: {},
+    };
   },
   mounted() {
-    storage.setItem("amounts", 20, "user");
     //storage.getStorage();
-    //storage.clear("gender","user")
+
+    //請求本地靜態加載json文件的形式
+    //     this.axios.get("/mock/user/login.json").then(res => {
+    //   this.res = res;
+    // });
+
+    //通過easy-mock平台實現數據mock 已經壞掉了
+    //     this.axios.get("/user/login.json").then(res => {
+    //   this.res = res;
+    // });
+    //本地集成mock.js 實現數據mock
+    this.axios.get("/user/login").then(res => {
+      this.response = res;
+      console.log(this.response);
+    });
   },
 };
 </script>
