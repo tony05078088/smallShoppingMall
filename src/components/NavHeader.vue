@@ -11,7 +11,10 @@
         <div class="topbar-user">
           <a href="javascript:;">登錄</a>
           <a href="javascript:;">註冊</a>
-          <a href="javascript:;">購物車</a>
+          <a href="javascript:;" class="my-cart">
+            <span class="icon-cart"></span>
+            購物車</a
+          >
         </div>
       </div>
     </div>
@@ -27,9 +30,37 @@ export default {
 
 <style lang="scss">
 .header {
-  .container {
-    width: 1226px;
-    margin:0 auto;
+  .nav-topbar {
+    height: 39px;
+    line-height: 39px;
+    background-color: #333333;
+    color: #b0b0b0;
+    .container {
+      width: 1226px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      a {
+        display: inline-block;
+        color: #b0b0b0;
+        margin-right: 17px;
+      }
+      .my-cart {
+        width: 110px;
+        background-color: #ff6600;
+        text-align: center;
+        color: #ffffff;
+        .icon-cart {
+          display: inline-block;
+          width: 16px;
+          height: 12px;
+          background: url("/imgs/icon-cart-checked.png") no-repeat center;
+          background-size: contain;
+          margin-right: 4px;
+        }
+      }
+    }
   }
 }
 </style>
