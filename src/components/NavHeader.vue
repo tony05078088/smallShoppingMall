@@ -9,9 +9,10 @@
           <a href="javascript:;">協議規則</a>
         </div>
         <div class="topbar-user">
-          <a href="javascript:;">登錄</a>
-          <a href="javascript:;">註冊</a>
-          <a href="javascript:;" class="my-cart">
+          <a href="javascript:;" v-if="username">{{ username }}</a>
+          <a href="javascript:;" v-else @click="login">登錄</a>
+          <a href="javascript:;" v-if="username">我的訂單</a>
+          <a href="javascript:;" class="my-cart" @click="goToCart">
             <span class="icon-cart"></span>
             購物車</a
           >
@@ -26,15 +27,87 @@
         <div class="header-menu">
           <div class="item-menu">
             <span>小米手機</span>
-            <div class="children"></div>
+            <div class="children">
+              <ul>
+                <li
+                  class="product"
+                  v-for="(item, index) in phoneList"
+                  :key="index"
+                >
+                  <a :href="'/#/product' + item.id" target="_blank">
+                    <div class="pro-img">
+                      <img :src="item.mainImage" :alt="item.subtitle" />
+                    </div>
+                    <div class="pro-name">{{ item.name }}</div>
+                    <div class="pro-price">{{ item.price | currency }}</div>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="item-menu">
             <span>RedMi紅米</span>
-            <div class="children"></div>
           </div>
           <div class="item-menu">
             <span>電視</span>
-            <div class="children"></div>
+            <div class="children">
+              <ul>
+                <li class="product">
+                  <a href="" target="_blank">
+                    <div class="pro-img">
+                      <img src="/imgs/nav-img/nav-3-1.jpg" alt="" />
+                    </div>
+                    <div class="pro-name">小米壁畫電視</div>
+                    <div class="pro-price">6999元</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="" target="_blank">
+                    <div class="pro-img">
+                      <img src="/imgs/nav-img/nav-3-2.jpg" alt="" />
+                    </div>
+                    <div class="pro-name">小米全面屏電視</div>
+                    <div class="pro-price">1999元</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="" target="_blank">
+                    <div class="pro-img">
+                      <img src="/imgs/nav-img/nav-3-3.png" alt="" />
+                    </div>
+                    <div class="pro-name">小米電視4A 32'</div>
+                    <div class="pro-price">699元</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="" target="_blank">
+                    <div class="pro-img">
+                      <img src="/imgs/nav-img/nav-3-4.jpg" alt="" />
+                    </div>
+                    <div class="pro-name">小米電視4A 55'</div>
+                    <div class="pro-price">1799元</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="" target="_blank">
+                    <div class="pro-img">
+                      <img src="/imgs/nav-img/nav-3-5.jpg" alt="" />
+                    </div>
+                    <div class="pro-name">小米電視4A 65'</div>
+                    <div class="pro-price">2699元</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="" target="_blank">
+                    <div class="pro-img">
+                      <img src="/imgs/nav-img/nav-3-6.png" alt="" />
+                    </div>
+                    <div class="pro-name">查看全部</div>
+                    <div class="pro-price">查看全部</div>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="header-search">
@@ -51,12 +124,54 @@
 <script>
 export default {
   name: "nav-header",
+  data() {
+    return {
+      username: "",
+      phoneList: [],
+    };
+  },
+  filters: {
+    currency(val) {
+      if (!val) return "0.00";
+      return "$" + val.toFixed(2) + "元";
+    },
+  },
+  mounted() {
+    this.getProductList();
+  },
+  methods: {
+    login() {
+      this.$router.push("/login");
+    },
+    getProductList() {
+      this.axios
+        .get("/products", {
+          params: {
+            categoryId: 100012,
+          },
+        })
+        .then(res => {
+          console.log(res);
+          if (res.list.length > 6) {
+            this.phoneList = res.list.slice(0, 6);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    goToCart() {
+      this.$router.push("/cart");
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 @import "./../assets/scss/base.scss";
 @import "./../assets/scss/mixin.scss";
+@import "./../assets/scss/config.scss";
+
 .header {
   .nav-topbar {
     height: 39px;
@@ -85,6 +200,7 @@ export default {
   .nav-header {
     .container {
       @include flex();
+      position: relative;
       height: 112px;
       .header-logo {
         //相框
@@ -127,9 +243,66 @@ export default {
           span {
             cursor: pointer;
           }
-          // &:hover {
-
-          // }
+          &:hover {
+            color: $colorA;
+            .children {
+              height: 220px;
+              opacity: 1;
+            }
+          }
+          .children {
+            position: absolute;
+            top: 112px;
+            left: 0;
+            width: 1226px;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.2s;
+            border-top: 1px solid #e5e5e5;
+            box-shadow: 0px 7px 6px 0px rgba(0, 0, 0, 0.11);
+            z-index: 10;
+            .product {
+              position: relative;
+              float: left;
+              width: 16.6%;
+              height: 220px;
+              font-size: 12px;
+              line-height: 12px;
+              text-align: center;
+              a {
+                display: inline-block;
+              }
+              img {
+                width: auto;
+                height: 111px;
+                margin-top: 26px;
+              }
+              .pro-img {
+                height: 137px;
+              }
+              .pro-name {
+                font-weight: bold;
+                margin: 19px 0 8px 0;
+                color: $colorB;
+              }
+              .pro-price {
+                color: $colorA;
+              }
+              &:before {
+                content: "";
+                position: absolute;
+                top: 28px;
+                right: 0;
+                border-left: 1px solid $colorF;
+                height: 100px;
+                width: 1px;
+              }
+              &:last-child:before {
+                display: none;
+              }
+            }
+          }
         }
       }
       .header-search {

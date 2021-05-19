@@ -10,15 +10,16 @@ axios.defaults.baseURL = "/api";
 axios.defaults.timeout = 8000;
 
 // mock 開關
-const mock = true
-if(mock) {
-  require('./mock/api')
+const mock = false;
+if (mock) {
+  require("./mock/api");
 }
 // 根據環境變量不同獲取不同的請求地址
 // axios.defaults.baseURL = env.baseURL;
 // console.log(env.baseURL);
 //axios 接口錯誤攔截器
 axios.interceptors.response.use(response => {
+  console.log(response);
   let res = response.data;
   if (res.status == 0) {
     return res.data;

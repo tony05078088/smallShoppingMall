@@ -30,10 +30,10 @@ export default {
     //   this.res = res;
     // });
     //本地集成mock.js 實現數據mock
-    this.axios.get("/user/login").then(res => {
-      this.response = res;
-      console.log(this.response);
-    });
+    // this.axios.get("/user/login").then(res => {
+    //   this.response = res;
+    //   console.log(this.response);
+    // });
   },
 };
 </script>
