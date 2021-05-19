@@ -148,13 +148,15 @@ export default {
         .get("/products", {
           params: {
             categoryId: 100012,
+            pageSize:6
           },
         })
         .then(res => {
           console.log(res);
-          if (res.list.length > 6) {
-            this.phoneList = res.list.slice(0, 6);
-          }
+          // if (res.list.length > 6) {
+          //   this.phoneList = res.list.slice(0, 6);
+          // }
+          this.phoneList = res.list;
         })
         .catch(err => {
           console.log(err);
@@ -261,6 +263,7 @@ export default {
             transition: all 0.2s;
             border-top: 1px solid #e5e5e5;
             box-shadow: 0px 7px 6px 0px rgba(0, 0, 0, 0.11);
+            background-color: #ffffff;
             z-index: 10;
             .product {
               position: relative;
