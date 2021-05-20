@@ -6,7 +6,19 @@
           <ul class="menu-wrap">
             <li class="menu-item">
               <a href="javascript:;">手機 電話卡</a>
-              <div class="children"></div>
+              <div class="children">
+                <ul v-for="(item, index) in menuList" :key="index">
+                  <li v-for="sub in item" :key="sub.id">
+                    <a :href="sub ? '/#/product/' + sub.id : ''">
+                      <img
+                        :src="sub ? sub.img : '/imgs/item-box-1.png'"
+                        alt=""
+                      />
+                      {{ sub ? sub.name : "小米9" }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li class="menu-item">
               <a href="javascript:;">電視 盒子</a>
@@ -113,6 +125,35 @@ export default {
           img: "/imgs/slider/slide-5.jpg",
         },
       ],
+      menuList: [
+        [
+          {
+            id: 30,
+            img: "/imgs/item-box-1.png",
+            name: "小米CC9",
+          },
+          {
+            id: 31,
+            img: "/imgs/item-box-2.png",
+            name: "小米青春版",
+          },
+          {
+            id: 32,
+            img: "/imgs/item-box-3.jpg",
+            name: "Remmi K20 PRO",
+          },
+          {
+            id: 33,
+            img: "/imgs/item-box-4.jpg",
+            name: "移動4G專區",
+          },
+        ],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ],
     };
   },
 };
@@ -120,6 +161,7 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/mixin.scss";
+@import "../assets/scss/config.scss";
 .index {
   .swiper-box {
     .nav-menu {
@@ -136,7 +178,7 @@ export default {
         padding: 1.5% 0;
         justify-content: space-evenly;
         .menu-item {
-         // height:11%;
+          // height:11%;
           a {
             position: relative;
             display: block;
@@ -154,6 +196,40 @@ export default {
           }
           &:hover {
             background-color: #ff6600;
+            .children {
+              display: block;
+            }
+          }
+          .children {
+            display: none;
+            width: 962px;
+            height: 451px;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            border: 1px solid $colorH;
+            ul {
+              display: flex;
+              justify-content: space-between;
+              height: 16.66%;
+              background-color: $colorG;
+              li {
+                width: 25%;
+                height: 100%;
+                line-height: 100%;
+                padding-left: 3%;
+                a {
+                  color: $colorB;
+                  font-size: 1rem;
+                }
+                img {
+                  width: 35px;
+                  height: 42px;
+                  vertical-align: middle;
+                  margin-right: 3%;
+                }
+              }
+            }
           }
         }
       }
