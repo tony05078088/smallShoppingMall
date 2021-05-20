@@ -63,8 +63,19 @@
           <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
       </div>
-      <div class="ads-box"></div>
-      <div class="banner"></div>
+      <div class="ads-box">
+        <a
+          :href="'/#/product/' + item.id"
+          v-for="(item, index) in adsList"
+          :key="index"
+        >
+          <img :src="item.img" alt="" />
+        </a>
+      </div>
+      <div class="banner">
+        <a href="/#/product/30"></a>
+        <img src="/imgs/banner-1.png" alt="" />
+      </div>
       <div class="product-box"></div>
     </div>
     <service-bar></service-bar>
@@ -154,6 +165,24 @@ export default {
         [0, 0, 0, 0],
         [0, 0, 0, 0],
       ],
+      adsList: [
+        {
+          id: 33,
+          img: "/imgs/ads/ads-1.png",
+        },
+        {
+          id: 48,
+          img: "/imgs/ads/ads-2.jpg",
+        },
+        {
+          id: 45,
+          img: "/imgs/ads/ads-3.png",
+        },
+        {
+          id: 47,
+          img: "/imgs/ads/ads-4.jpg",
+        },
+      ],
     };
   },
 };
@@ -170,7 +199,6 @@ export default {
       width: 264px;
       height: 451px;
       background-color: #55585a7a;
-      //opacity: 0.8;
       .menu-wrap {
         height: 97%;
         display: flex;
@@ -243,6 +271,21 @@ export default {
         width: 100%;
         height: 100%;
       }
+    }
+  }
+  .ads-box {
+    @include flex();
+    margin: 1% 0 2% 0;
+    width: 100%;
+    a {
+      height: 100%;
+    }
+  }
+  .banner {
+    width: 100%;
+    margin-bottom: 3%;
+    img {
+      width: 100%;
     }
   }
 }
