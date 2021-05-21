@@ -76,7 +76,32 @@
         <a href="/#/product/30"></a>
         <img src="/imgs/banner-1.png" alt="" />
       </div>
-      <div class="product-box"></div>
+    </div>
+    <div class="product-box">
+      <div class="container">
+        <h2>手機</h2>
+        <div class="wrapper">
+          <div class="banner-left">
+            <a href=""></a>
+            <img src="/imgs/mix-alpha.jpg" alt="" />
+          </div>
+          <div class="list-box">
+            <div class="list" v-for="(arr, i) in phoneList" :key="i">
+              <div class="item" v-for="(item, index) in arr" :key="index">
+                <span :class="{'new-pro': index % 2 == 0}">新品</span>
+                <div class="item-img">
+                  <img :src="item.mainImage" alt="" />
+                </div>
+                <div class="item-info">
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.subtitle }}</p>
+                  <p class="price">{{ item.price }}元</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <service-bar></service-bar>
   </div>
@@ -183,7 +208,30 @@ export default {
           img: "/imgs/ads/ads-4.jpg",
         },
       ],
+      phoneList: [],
     };
+  },
+  methods: {
+    init() {
+      this.axios
+        .get("products", {
+          params: {
+            categoryId: 100012,
+            pageSize: 8,
+          },
+        })
+        .then(res => {
+          console.log(res);
+          // slice不會影響原array,splice會影響
+          this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)];
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+  },
+  mounted() {
+    this.init();
   },
 };
 </script>
@@ -286,6 +334,102 @@ export default {
     margin-bottom: 3%;
     img {
       width: 100%;
+    }
+  }
+  .product-box {
+    box-sizing: border-box;
+    margin: 0 auto;
+    background-color: $colorJ;
+    padding: 3% 5%;
+    .container {
+      margin: 0 auto;
+      h2 {
+        font-size: $fontF;
+        height: 21px;
+        line-height: 21px;
+        color: $colorB;
+      }
+      .wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 3%;
+        .banner-left {
+          width: 28%;
+          display: inline-block;
+          margin-right: 2%;
+          img {
+            width: 67%;
+            height: auto;
+            object-fit: cover;
+          }
+        }
+        .list-box {
+          width: 70%;
+          height: 50%;
+          display: flex;
+          flex-direction: column;
+          .list {
+            @include flex();
+            width: 100%;
+            height: 50%;
+            .item {
+              //width: 236px;
+              width: 25%;
+              height: 302px;
+              background-color: $colorG;
+              text-align: center;
+              span {
+                display: inline-block;
+                width: 67px;
+                height: 24px;
+                font-size: 14px;
+                line-height: 24px;
+                color: $colorG;
+                &.new-pro {
+                  background-color: #7ecf68;
+                }
+                &.kill-pro {
+                  background-color: #e82626;
+                }
+              }
+              .item-img {
+                width: 100%;
+                img {
+                  max-width: 100%;
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+              .item-info {
+                h3 {
+                  font-size: $fontJ;
+                  color: $colorB;
+                  line-height: $fontJ;
+                  font-weight: bold;
+                }
+                p {
+                  color: $colorD;
+                  line-height: 13px;
+                  margin: 6px auto 13px;
+                }
+                .price {
+                  color: #f20a0a;
+                  font-size: $fontJ;
+                  font-weight: bold;
+                  cursor: pointer;
+                  &:after {
+                    content: "";
+                    @include bgImg(22px, 22px, "/imgs/icon-cart-hover.png");
+                    margin-left: 5px;
+                    vertical-align: middle;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
