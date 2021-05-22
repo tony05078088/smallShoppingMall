@@ -1,23 +1,44 @@
 <template>
-  <div class="modal" v-show="showModal">
-    <div class="mask">
+  <transition name="slide">
+    <div class="modal" v-show="showModal">
+      <div class="mask"></div>
       <div class="modal-dialog">
         <div class="modal-header">
           <span>標題</span>
-          <a href="javascript:;" class="icon-close"></a>
+          <a
+            href="javascript:;"
+            @click="$emit('cancel')"
+            class="icon-close"
+          ></a>
         </div>
         <div class="modal-body">
           <slot name="body"></slot>
         </div>
         <div class="modal-footer">
-          <div class="btn-group">
-            <a href="javascript:;" class="btn">確定</a>
-            <a href="javascript:;" class="btn">取消</a>
+          <a
+            href="javascript:;"
+            v-if="btnType == 1"
+            class="btn"
+            @click="$emit('updateModal')"
+            >確定</a
+          >
+          <a
+            href="javascript:;"
+            v-else-if="btnType == 2"
+            class="btn"
+            @click="$emit('cancel')"
+            >確定</a
+          >
+          <div class="btn-group" v-else>
+            <a href="javascript:;" @click="$emit('updateModal')" class="btn"
+              >確定</a
+            >
+            <a href="javascript:;" @click="$emit('cancel')" class="btn">取消</a>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

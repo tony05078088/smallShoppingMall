@@ -97,7 +97,9 @@
                 <div class="item-info">
                   <h3>{{ item.name }}</h3>
                   <p>{{ item.subtitle }}</p>
-                  <p class="price">{{ item.price }}元</p>
+                  <p class="price" @click="addCart(item.id)">
+                    {{ item.price }}元
+                  </p>
                 </div>
               </div>
             </div>
@@ -111,7 +113,9 @@
       confirmText="查看購物車"
       btnType="1"
       modalType="middle"
-      :showModal="true"
+      :showModal="showModal"
+      @updateModal="updateModal"
+      @cancel="showModal = false"
     >
       <template v-slot:body>
         <p>
@@ -226,6 +230,7 @@ export default {
         },
       ],
       phoneList: [],
+      showModal: false,
     };
   },
   methods: {
@@ -246,6 +251,27 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    addCart(id) {
+      console.log(id);
+      this.showModal = true;
+      return;
+      // this.axios
+      //   .post("/carts", {
+      //     productId: id,
+      //     selected: true,
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     this.showModal = true;
+      //   });
+    },
+    updateModal() {
+      this.showModal = false;
+      // this.$router.push("/cart");
     },
   },
   mounted() {
