@@ -88,7 +88,9 @@
           <div class="list-box">
             <div class="list" v-for="(arr, i) in phoneList" :key="i">
               <div class="item" v-for="(item, index) in arr" :key="index">
-                <span :class="{'new-pro': index % 2 == 0}">新品</span>
+                <span :class="[index % 2 == 0 ? 'new-pro' : 'kill-pro']">{{
+                  index % 2 == 0 ? "新品" : "秒殺"
+                }}</span>
                 <div class="item-img">
                   <img :src="item.mainImage" alt="" />
                 </div>
@@ -104,11 +106,25 @@
       </div>
     </div>
     <service-bar></service-bar>
+    <modal
+      title="提示"
+      confirmText="查看購物車"
+      btnType="1"
+      modalType="middle"
+      :showModal="true"
+    >
+      <template v-slot:body>
+        <p>
+          商品添加成功
+        </p>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import ServiceBar from "../components/ServiceBar";
+import Modal from "../components/Modal";
 import {Swiper, SwiperSlide} from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 export default {
@@ -117,6 +133,7 @@ export default {
     Swiper,
     SwiperSlide,
     ServiceBar,
+    Modal,
   },
   data() {
     return {
@@ -217,12 +234,13 @@ export default {
         .get("products", {
           params: {
             categoryId: 100012,
-            pageSize: 8,
+            pageSize: 14,
           },
         })
         .then(res => {
           console.log(res);
           // slice不會影響原array,splice會影響
+          res.list = res.list.slice(6, 14);
           this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)];
         })
         .catch(err => {
@@ -373,6 +391,9 @@ export default {
             @include flex();
             width: 100%;
             height: 50%;
+            &:last-child {
+              margin-top: 1.5%;
+            }
             .item {
               //width: 236px;
               width: 25%;
@@ -411,7 +432,7 @@ export default {
                 p {
                   color: $colorD;
                   line-height: 13px;
-                  margin: 6px auto 13px;
+                  margin: 6px auto;
                 }
                 .price {
                   color: #f20a0a;

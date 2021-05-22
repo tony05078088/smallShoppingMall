@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <router-view></router-view>
   </div>
 </template>
@@ -19,12 +18,10 @@ export default {
   },
   mounted() {
     //storage.getStorage();
-
     //請求本地靜態加載json文件的形式
     //     this.axios.get("/mock/user/login.json").then(res => {
     //   this.res = res;
     // });
-
     //通過easy-mock平台實現數據mock 已經壞掉了
     //     this.axios.get("/user/login.json").then(res => {
     //   this.res = res;
@@ -38,6 +35,8 @@ export default {
 };
 </script>
 
-<style>
-@import './assets/scss/reset.scss'
+<style lang="scss">
+@import "./assets/scss/reset.scss";
+@import "./assets/scss/config.scss";
+@import "./assets/scss/button.scss";
 </style>
