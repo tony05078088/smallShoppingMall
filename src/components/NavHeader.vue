@@ -198,7 +198,7 @@ export default {
       }
       .my-cart {
         width: 110px;
-        background-color: #ff6600;
+        background-color: #B0B0B0;
         text-align: center;
         color: #ffffff;
         margin-right: 0;
