@@ -5,6 +5,7 @@ import VueLazyLoad from "vue-lazyload";
 import App from "./App.vue";
 // import env from "./env";
 import router from "./router";
+import store from "./store";
 // 掛載axios到vue實例上
 Vue.prototype.axios = axios;
 //根據前端跨域方式做調整 Ex: /a/b  :  /api/a/b => /a/b
@@ -45,5 +46,6 @@ Vue.use(VueCookie);
 Vue.config.productionTip = false;
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount("#app");
