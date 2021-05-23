@@ -31,6 +31,21 @@ export default {
     //   this.response = res;
     //   console.log(this.response);
     // });
+    this.getUser();
+    this.getCartCount();
+  },
+  methods: {
+    getUser() {
+      this.axios.get("/user").then(res => {
+        console.log(res);
+        //todo: 保存到vuex中
+      });
+    },
+    getCartCount() {
+      this.axios.get("/carts/products/sum").then(res => {
+        console.log(res);
+      });
+    },
   },
 };
 </script>

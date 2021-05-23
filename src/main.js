@@ -23,11 +23,14 @@ if (mock) {
 axios.interceptors.response.use(response => {
   console.log(response);
   let res = response.data;
+  let path = location.hash;
   if (res.status == 0) {
     return res.data;
   } else if (res.status == 10) {
-    //未登入
-    window.location.href = "/#/login";
+    if (path != "#/index") {
+                             //未登入且頁面不為首頁頁面就跳轉至登錄頁
+                             window.location.href = "/#/login";
+                           }
   } else {
     alert(res.msg);
     return Promise.reject();
