@@ -4,7 +4,7 @@
       <div class="mask"></div>
       <div class="modal-dialog">
         <div class="modal-header">
-          <span>標題</span>
+          <span>{{ title }}</span>
           <a
             href="javascript:;"
             @click="$emit('cancel')"
@@ -20,20 +20,22 @@
             v-if="btnType == 1"
             class="btn"
             @click="$emit('updateModal')"
-            >確定</a
+            >{{ confirmText }}</a
           >
           <a
             href="javascript:;"
             v-else-if="btnType == 2"
             class="btn"
             @click="$emit('cancel')"
-            >確定</a
+            >{{ confirmText }}</a
           >
           <div class="btn-group" v-else>
-            <a href="javascript:;" @click="$emit('updateModal')" class="btn"
-              >確定</a
-            >
-            <a href="javascript:;" @click="$emit('cancel')" class="btn">取消</a>
+            <a href="javascript:;" @click="$emit('updateModal')" class="btn">{{
+              confirmText
+            }}</a>
+            <a href="javascript:;" @click="$emit('cancel')" class="btn">{{
+              cancelText
+            }}</a>
           </div>
         </div>
       </div>

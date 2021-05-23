@@ -36,7 +36,7 @@
                 >
                   <a :href="'/#/product' + item.id" target="_blank">
                     <div class="pro-img">
-                      <img :src="item.mainImage" :alt="item.subtitle" />
+                      <img v-lazy="item.mainImage" :alt="item.subtitle" />
                     </div>
                     <div class="pro-name">{{ item.name }}</div>
                     <div class="pro-price">{{ item.price | currency }}</div>
@@ -55,7 +55,7 @@
                 <li class="product">
                   <a href="" target="_blank">
                     <div class="pro-img">
-                      <img src="/imgs/nav-img/nav-3-1.jpg" alt="" />
+                      <img v-lazy="'/imgs/nav-img/nav-3-1.jpg'" alt="" />
                     </div>
                     <div class="pro-name">小米壁畫電視</div>
                     <div class="pro-price">6999元</div>
@@ -148,7 +148,7 @@ export default {
         .get("/products", {
           params: {
             categoryId: 100012,
-            pageSize:6
+            pageSize: 6,
           },
         })
         .then(res => {
@@ -192,6 +192,7 @@ export default {
         background-color: #ff6600;
         text-align: center;
         color: #ffffff;
+        margin-right: 0;
         .icon-cart {
           @include bgImg(16px, 12px, "/imgs/icon-cart-checked.png");
           margin-right: 4px;

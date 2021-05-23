@@ -1,5 +1,7 @@
 import axios from "axios";
 import Vue from "vue";
+import VueCookie from "vue-cookie";
+import VueLazyLoad from "vue-lazyload";
 import App from "./App.vue";
 // import env from "./env";
 import router from "./router";
@@ -28,9 +30,14 @@ axios.interceptors.response.use(response => {
     window.location.href = "/#/login";
   } else {
     alert(res.msg);
+    return Promise.reject();
   }
 });
 
+Vue.use(VueLazyLoad, {
+  loading: "/imgs/loading-svg/loading-bars.svg",
+});
+Vue.use(VueCookie);
 //生產環境提示
 Vue.config.productionTip = false;
 new Vue({
