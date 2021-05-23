@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
 export default {
   name: "login",
   //data宣告為一個function,避免頁面之間及組件之間數據 全局的竄用
@@ -51,6 +52,8 @@ export default {
     };
   },
   methods: {
+    // saveUserName === this.$store.dispatch('saveUserName)
+    ...mapActions(["saveUserName"]),
     login() {
       // 因變量掛載在Vue實例上,可使用解構
       let {username, password} = this;
@@ -65,6 +68,8 @@ export default {
             expires: "1M",
           });
           //todo: 保存使用者名稱
+          //this.$store.dispatch("saveUserName", res.username);
+          this.saveUserName(res.username);
           this.$router.push("/index");
         })
         .catch(err => {
