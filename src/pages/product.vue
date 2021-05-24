@@ -41,11 +41,11 @@
         <h3>慢慢回味每一瞬間的精彩</h3>
         <p>後置FPS960電影般超慢動作影片,將眨眼間的美妙展現地淋漓盡致</p>
         <p>以AI精準分析影片內容, 15個場景智能匹配背景音效</p>
-        <div class="video-bg" @click="showSlide = true"></div>
+        <div class="video-bg" @click="showSlide = 'slideDown'"></div>
         <div class="video-box">
-          <div class="overlay" v-if="showSlide"></div>
-          <div class="video" :class="{slide: showSlide}">
-            <span class="icon-close" @click="showSlide = false"></span>
+          <div class="overlay" v-if="showSlide == 'slideDown'"></div>
+          <div class="video" :class="showSlide">
+            <span class="icon-close" @click="closeMusic"></span>
             <video
               v-if="showSlide"
               src="/imgs/product/video.mp4"
@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      showSlide: false,
+      showSlide: "",
       swiperOptions: {
         autoplay: true,
         loop: true,
@@ -107,6 +107,13 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    closeMusic() {
+      this.showSlide = "slideUp";
+      let vi = document.getElementsByTagName("video")[0];
+      vi.pause();
+    },
   },
 };
 </script>
@@ -203,6 +210,26 @@ export default {
           opacity: 0.4;
           //z-index: 20;
         }
+        @keyframes slideDown {
+          from {
+            top: -50%;
+            opacity: 0;
+          }
+          to {
+            top: 50%;
+            opacity: 1;
+          }
+        }
+        @keyframes slideUp {
+          from {
+            top: 50%;
+            opacity: 1;
+          }
+          to {
+            top: -50%;
+            opacity: 0;
+          }
+        }
         .video {
           width: 100%;
           height: 100%;
@@ -213,9 +240,20 @@ export default {
           z-index: 25;
           opacity: 0;
           transition: all 0.8s;
-          &.slide {
+          // &.slide {
+          // 使用transition達到動畫效果
+          //   top: 50%;
+          //   opacity: 1;
+          // }
+          &.slideDown {
+            //利用animation達到動畫效果
+            animation: slideDown 0.6s linear;
             top: 50%;
             opacity: 1;
+          }
+          &.slideUp {
+            //利用animation達到動畫效果
+            animation: slideUp 0.6s linear;
           }
           video {
             width: 90%;
