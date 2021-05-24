@@ -41,12 +41,13 @@
         <h3>慢慢回味每一瞬間的精彩</h3>
         <p>後置FPS960電影般超慢動作影片,將眨眼間的美妙展現地淋漓盡致</p>
         <p>以AI精準分析影片內容, 15個場景智能匹配背景音效</p>
-        <div class="video-bg"></div>
+        <div class="video-bg" @click="showSlide = true"></div>
         <div class="video-box">
-          <div class="overlay"></div>
-          <div class="video">
-            <span class="icon-close"></span>
+          <div class="overlay" v-if="showSlide"></div>
+          <div class="video" :class="{slide: showSlide}">
+            <span class="icon-close" @click="showSlide = false"></span>
             <video
+              v-if="showSlide"
               src="/imgs/product/video.mp4"
               autoplay
               controls="controls"
@@ -71,6 +72,7 @@ export default {
   },
   data() {
     return {
+      showSlide: false,
       swiperOptions: {
         autoplay: true,
         loop: true,
@@ -121,6 +123,9 @@ export default {
       width: 100%;
       height: 100%;
       position: relative;
+      img {
+        width: 100%;
+      }
       .all_details {
         @include position(absolute, 5%, 50%, 100%, 50%);
         @include flex();
@@ -192,21 +197,26 @@ export default {
       }
       .video-box {
         width: 100%;
-        //height:100%;
         .overlay {
           @include position(fixed);
           background-color: $colorB;
           opacity: 0.4;
-          z-index: 20;
+          //z-index: 20;
         }
         .video {
           width: 100%;
           height: 100%;
           position: fixed;
-          top: 50%;
+          top: -50%;
           left: 50%;
           transform: translate(-50%, -50%);
           z-index: 25;
+          opacity: 0;
+          transition: all 0.8s;
+          &.slide {
+            top: 50%;
+            opacity: 1;
+          }
           video {
             width: 90%;
             height: 90%;
