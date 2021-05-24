@@ -2,9 +2,19 @@
   <div class="product">
     <product-param>
       <template v-slot:buy>
-       <button class="btn">立即購買</button>
+        <button class="btn">立即購買</button>
       </template>
     </product-param>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
+    <div class="h">123</div>
   </div>
 </template>
 
@@ -18,4 +28,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.h {
+  height: 150px;
+  background-color: red;
+}
+</style>

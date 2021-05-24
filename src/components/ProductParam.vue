@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-bar">
+  <div class="nav-bar" :class="{isFixed: isFixed}">
     <div class="container">
       <div class="pro-title">
         <span>
@@ -22,6 +22,27 @@
 <script>
 export default {
   name: "nav-bar",
+  data() {
+    return {
+      isFixed: false,
+    };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.initHeight);
+  },
+  methods: {
+    initHeight() {
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      this.isFixed = scrollTop > 152 ? true : false;
+    },
+  },
+  destroyed() {
+    // 觸發的function必須獨立抽取,否則是無法remove,第三個參數為判斷冒泡或捕獲,false為冒泡
+    window.removeEventListener("scroll", this.initHeight, false);
+  },
 };
 </script>
 
@@ -34,6 +55,13 @@ export default {
   line-height: 50px;
   padding: 0 5%;
   border-top: 1px solid $colorH;
+  &.isFixed {
+    position: fixed;
+    top: 0;
+    background-color: $colorG;
+    box-shadow: 0 5px 5px $colorE;
+    width: 95%;
+  }
   .container {
     @include flex();
     width: 100%;
@@ -63,7 +91,7 @@ export default {
           cursor: pointer;
         }
         &:not(:last-child) {
-          &:after {  
+          &:after {
             position: absolute;
             top: 50%;
             right: -2.5%;
