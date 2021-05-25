@@ -61,7 +61,7 @@
             <div class="goods_price">總計 {{ product.price }}元</div>
           </div>
           <div class="button_area">
-            <button class="btn-default">加入購物車</button>
+            <button class="btn-default" @click="addCart">加入購物車</button>
           </div>
         </div>
       </div>
@@ -106,6 +106,7 @@ export default {
   },
   data() {
     return {
+      id: this.$route.params.id,
       swiperOptions: {
         autoplay: true,
         loop: true,
@@ -121,10 +122,24 @@ export default {
   },
   methods: {
     getProductInfo() {
-      let id = this.$route.params.id;
-      this.axios.get(`/products/${id}`).then(res => {
+      this.axios.get(`/products/${this.id}`).then(res => {
         this.product = res;
       });
+    },
+    addCart() {
+      this.axios
+        .post("/carts", {
+          productId: this.id,
+          selected: true,
+        })
+        .then((res = {cartProductVoList: []}) => {
+          console.log(res);
+          this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
+          this.$router.push("/cart");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
   },
   mounted() {
@@ -279,6 +294,7 @@ export default {
             width: 50%;
             height: 50%;
             background-color: $colorA;
+            cursor: pointer;
           }
         }
       }

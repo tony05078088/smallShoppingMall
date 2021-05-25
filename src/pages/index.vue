@@ -111,7 +111,7 @@
     <service-bar></service-bar>
     <modal
       title="提示"
-      confirmText="查看購物車"
+      confirmText="確定"
       btnType="1"
       modalType="middle"
       :showModal="showModal"
@@ -255,24 +255,24 @@ export default {
     },
     addCart(id) {
       console.log(id);
-      this.showModal = true;
-      return;
-      // this.axios
-      //   .post("/carts", {
-      //     productId: id,
-      //     selected: true,
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //     this.showModal = true;
-      //   });
+      this.axios
+        .post("/carts", {
+          productId: id,
+          selected: true,
+        })
+        .then(res => {
+          console.log(res);
+          this.showModal = true;
+          this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
+        })
+        .catch(err => {
+          console.log(err);
+          this.showModal = true;
+        });
     },
     updateModal() {
       this.showModal = false;
-      // this.$router.push("/cart");
+      this.$router.push("/cart");
     },
   },
   mounted() {

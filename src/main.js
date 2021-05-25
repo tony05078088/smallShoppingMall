@@ -29,9 +29,10 @@ axios.interceptors.response.use(response => {
     return res.data;
   } else if (res.status == 10) {
     if (path != "#/index") {
-                             //未登入且頁面不為首頁頁面就跳轉至登錄頁
+                             //未登入且頁面不為首頁頁面就跳轉至登錄頁且判斷為失敗
                              window.location.href = "/#/login";
                            }
+    return Promise.reject();
   } else {
     alert(res.msg);
     return Promise.reject();
