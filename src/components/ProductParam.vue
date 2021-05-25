@@ -3,7 +3,7 @@
     <div class="container">
       <div class="pro-title">
         <span>
-          {{title}}
+          {{ title }}
         </span>
       </div>
       <div class="pro-param">
@@ -22,7 +22,7 @@
 <script>
 export default {
   name: "nav-bar",
-  props:['title'],
+  props: ["title"],
   data() {
     return {
       isFixed: false,
@@ -62,6 +62,7 @@ export default {
     background-color: $colorG;
     box-shadow: 0 5px 5px $colorE;
     width: 95%;
+    z-index: 30;
   }
   .container {
     @include flex();
