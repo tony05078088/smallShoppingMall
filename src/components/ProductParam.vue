@@ -3,7 +3,7 @@
     <div class="container">
       <div class="pro-title">
         <span>
-          小米8
+          {{title}}
         </span>
       </div>
       <div class="pro-param">
@@ -22,6 +22,7 @@
 <script>
 export default {
   name: "nav-bar",
+  props:['title'],
   data() {
     return {
       isFixed: false,

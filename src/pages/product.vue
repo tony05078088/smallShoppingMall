@@ -1,16 +1,16 @@
 <template>
   <div class="product">
-    <product-param>
+    <product-param :title="product.name">
       <template v-slot:buy>
-        <button class="btn">立即購買</button>
+        <button class="btn" @click="buy">立即購買</button>
       </template>
     </product-param>
     <div class="content">
       <div class="item_bg">
         <img src="/imgs/product/product-bg-1.png" alt="" />
         <div class="all_details">
-          <div class="title">AI 4K 全螢幕電視</div>
-          <div class="description">小米全面屏電視 55英吋</div>
+          <div class="title">{{ product.name }}</div>
+          <div class="description">{{ product.subtitle }}</div>
           <div class="feature">
             <span>全球首款雙頻</span>
             <span>驍龍845</span>
@@ -18,7 +18,7 @@
             <span>全球首款雙頻</span>
           </div>
           <div class="price">
-            <span>$999</span>
+            <span>${{ product.price }}</span>
           </div>
         </div>
       </div>
@@ -72,7 +72,8 @@ export default {
   },
   data() {
     return {
-      showSlide: "",
+      product: {}, //商品訊息
+      showSlide: "", //控制動畫效果
       swiperOptions: {
         autoplay: true,
         loop: true,
@@ -114,6 +115,20 @@ export default {
       let vi = document.getElementsByTagName("video")[0];
       vi.pause();
     },
+    getProductInfo() {
+      let id = this.$route.params.id;
+      this.axios.get(`/products/${id}`).then(res => {
+        console.log(res);
+        this.product = res;
+      });
+    },
+    buy() {
+      let id = this.$route.params.id;
+      this.$router.push(`/detail/${id}`);
+    },
+  },
+  mounted() {
+    this.getProductInfo();
   },
 };
 </script>
