@@ -9,7 +9,11 @@
       <div class="items_box">
         <ul class="items_head">
           <li class="col-1">
-            <span class="checkbox" :class="{checked: allChecked}"></span>
+            <span
+              class="checkbox"
+              :class="{checked: allChecked}"
+              @click="toggleAll"
+            ></span>
             全選
           </li>
           <li class="col-3">
@@ -91,12 +95,22 @@ export default {
     getCartList() {
       this.axios.get("/carts").then(res => {
         console.log(res);
-        this.list = res.cartProductVoList || [];
-        this.allChecked = res.selectedAll;
-        this.cartTotalPrice = res.cartTotalPrice;
-        this.checkedNumber = this.list.filter(item => {
-          return item.productSelected;
-        });
+        this.renderData(res);
+      });
+    },
+    toggleAll() {
+      let url = this.allChecked ? "/carts/unSelectAll" : "/carts/selectAll";
+      this.axios.put(url).then(res => {
+        console.log(res);
+        this.renderData(res);
+      });
+    },
+    renderData(res) {
+      this.list = res.cartProductVoList || [];
+      this.allChecked = res.selectedAll;
+      this.cartTotalPrice = res.cartTotalPrice;
+      this.checkedNumber = this.list.filter(item => {
+        return item.productSelected;
       });
     },
   },
@@ -131,6 +145,12 @@ export default {
             border: 1px solid #e5e5e5;
             vertical-align: middle;
             margin-right: 5%;
+            cursor: pointer;
+            &.checked {
+              background: url("/imgs/icon-gou.png") #f60 no-repeat 50%;
+              background-size: 16px 12px;
+              border: none;
+            }
           }
         }
         .col-1 {
