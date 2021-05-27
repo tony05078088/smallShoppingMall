@@ -38,6 +38,7 @@
               <span
                 class="checkbox"
                 :class="{checked: item.productSelected}"
+                @click="updateCart"
               ></span>
             </div>
             <div class="item_name">
@@ -45,9 +46,16 @@
               <span>{{ item.productName + " , " + item.productSubtitle }}</span>
             </div>
             <div class="item_price">{{ item.productPrice }}</div>
-            <div class="item_quantity">{{ item.quantity }}</div>
+            <div class="item_quantity">
+              <div class="number_box">
+                <a href="javascript:;" @click="updateCart(item, '-')">-</a>
+                {{ item.quantity }}
+                <a href="javascript:;" @click="updateCart(item, '+')">+</a>
+              </div>
+            </div>
+
             <div class="item_total">{{ item.productTotalPrice }}</div>
-            <div class="item_del"></div>
+            <div class="item_del" @click="deleteProduct(item)"></div>
           </li>
         </ul>
       </div>
@@ -92,12 +100,14 @@ export default {
     this.getCartList();
   },
   methods: {
+    //獲取購物車列表
     getCartList() {
       this.axios.get("/carts").then(res => {
         console.log(res);
         this.renderData(res);
       });
     },
+    //控制全選功能
     toggleAll() {
       let url = this.allChecked ? "/carts/unSelectAll" : "/carts/selectAll";
       this.axios.put(url).then(res => {
@@ -105,12 +115,47 @@ export default {
         this.renderData(res);
       });
     },
+    //公共賦值
     renderData(res) {
       this.list = res.cartProductVoList || [];
       this.allChecked = res.selectedAll;
       this.cartTotalPrice = res.cartTotalPrice;
       this.checkedNumber = this.list.filter(item => {
         return item.productSelected;
+      });
+    },
+    //更新購物車數量和單選狀態
+    updateCart(item, type) {
+      let quantity = item.quantity;
+      let selected = item.productSelected;
+      if (type == "+") {
+        if (quantity >= item.productStock) {
+          alert("庫存不足");
+          return;
+        }
+        quantity += 1;
+      } else if (type == "-") {
+        if (quantity == 1) {
+          alert("商品至少保留一件");
+          return;
+        }
+        quantity -= 1;
+      } else {
+        selected = !item.productSelected;
+      }
+      this.axios
+        .put(`/carts/${item.productId}`, {
+          quantity,
+          selected,
+        })
+        .then(res => {
+          this.renderData(res);
+        });
+    },
+    //刪除購物車商品
+    deleteProduct(item) {
+      this.axios.delete(`/carts/${item.productId}`).then(res => {
+        this.renderData(res);
       });
     },
   },
@@ -178,6 +223,19 @@ export default {
           flex: 2;
           text-align: center;
           padding: 0.5% 0;
+          .number_box {
+            display: inline-block;
+            width: 60%;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid #e5e5e5;
+            font-size: 14px;
+            a {
+              display: inline-block;
+              width: 33%;
+              color: #333;
+            }
+          }
         }
         .item_price {
           text-align: center;
@@ -211,6 +269,13 @@ export default {
             background-size: 16px 12px;
             border: none;
           }
+        }
+        .item_del {
+          width: 14px;
+          height: 12px;
+          background: url("/imgs/icon-close.png") no-repeat 50%;
+          background-size: contain;
+          cursor: pointer;
         }
       }
     }
