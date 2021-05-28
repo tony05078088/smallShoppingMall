@@ -31,8 +31,12 @@ export default {
     //   this.response = res;
     //   console.log(this.response);
     // });
-    this.getUser();
-    this.getCartCount();
+
+    //判斷當前為登錄狀態時拉取購物車及使用者訊息
+    if (this.$cookie.get("userId")) {
+      this.getUser();
+      this.getCartCount();
+    }
   },
   methods: {
     getUser() {

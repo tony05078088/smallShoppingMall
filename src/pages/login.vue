@@ -65,12 +65,19 @@ export default {
         .then(res => {
           console.log(res);
           this.$cookie.set("userId", res.id, {
-            expires: "1M",
+            expires: "Session",
           });
           //todo: 保存使用者名稱
           //this.$store.dispatch("saveUserName", res.username);
           this.saveUserName(res.username);
-          this.$router.push("/index");
+          this.$router.push({
+            // path:'/index',
+            //query傳參數用path,params傳參要用name,對應的是路由的名稱
+            name: "index",
+            params: {
+              from: "login",
+            },
+          });
         })
         .catch(err => {
           console.log(err);
@@ -85,7 +92,7 @@ export default {
         })
         .then(res => {
           console.log(res);
-         this.$message.info("註冊成功");
+          this.$message.info("註冊成功");
         })
         .catch(err => {
           console.log(err);

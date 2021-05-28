@@ -11,6 +11,7 @@
         <div class="topbar-user">
           <a href="javascript:;" v-if="username">{{ username }}</a>
           <a href="javascript:;" v-else @click="login">登錄</a>
+          <a href="javascript:;" v-if="username" @click="logout">退出</a>
           <a href="javascript:;" v-if="username">我的訂單</a>
           <a href="javascript:;" class="my-cart" @click="goToCart">
             <span class="icon-cart"></span>
@@ -147,6 +148,10 @@ export default {
   },
   mounted() {
     this.getProductList();
+    let params = this.$route.params;
+    if (params && params.from == "login") {
+      this.getCartCount();
+    }
   },
   methods: {
     login() {
@@ -174,6 +179,21 @@ export default {
     goToCart() {
       this.$router.push("/cart");
     },
+    logout() {
+      this.axios.post("/user/logout").then(() => {
+        this.$message("登出成功");
+        // 將cookie的值設為空
+        this.$cookie.set("userId", "", {expires: "-1"});
+        //將人名及購物車數量清空
+        this.$store.dispatch("saveUserName", "");
+        this.$store.dispatch("saveCartCount", 0);
+      });
+    },
+    getCartCount() {
+      this.axios.get("/carts/products/sum").then((res = 0) => {
+        this.$store.dispatch("saveCartCount", res);
+      });
+    },
   },
 };
 </script>
@@ -198,7 +218,7 @@ export default {
       }
       .my-cart {
         width: 110px;
-        background-color: #B0B0B0;
+        background-color: #b0b0b0;
         text-align: center;
         color: #ffffff;
         margin-right: 0;
