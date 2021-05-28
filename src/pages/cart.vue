@@ -38,7 +38,7 @@
               <span
                 class="checkbox"
                 :class="{checked: item.productSelected}"
-                @click="updateCart"
+                @click="updateCart(item)"
               ></span>
             </div>
             <div class="item_name">
@@ -69,7 +69,7 @@
         <div class="item_wrap_right">
           <span class="price">合計 {{ cartTotalPrice }}元</span>
           <span class="checkout">
-            <a href="javascript:;">去結算</a>
+            <a href="javascript:;" @click="order">去結算</a>
           </span>
         </div>
       </div>
@@ -157,6 +157,16 @@ export default {
       this.axios.delete(`/carts/${item.productId}`).then(res => {
         this.renderData(res);
       });
+    },
+    //購物車下單
+    order() {
+      // 購物車內品項是否都有選中
+      let isCheck = this.list.every(item => !item.productSelected);
+      if (isCheck) {
+        alert("請選擇至少一件商品");
+      } else {
+        this.$router.push("/order/confirm");
+      }
     },
   },
 };
