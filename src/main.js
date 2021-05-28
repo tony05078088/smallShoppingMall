@@ -1,4 +1,7 @@
 import axios from "axios";
+import {Message} from "element-ui";
+//引入element UI 系統預設css檔
+import "element-ui/lib/theme-chalk/index.css";
 import Vue from "vue";
 import VueCookie from "vue-cookie";
 import VueLazyLoad from "vue-lazyload";
@@ -34,9 +37,10 @@ axios.interceptors.response.use(response => {
                            }
     return Promise.reject();
   } else {
-    alert(res.msg);
-    return Promise.reject();
-  }
+           // alert(res.msg);
+           Message.error(res.msg);
+           return Promise.reject();
+         }
 });
 
 Vue.use(VueLazyLoad, {
@@ -45,6 +49,7 @@ Vue.use(VueLazyLoad, {
 Vue.use(VueCookie);
 //生產環境提示
 Vue.config.productionTip = false;
+Vue.prototype.$message = Message;
 new Vue({
   router,
   store,

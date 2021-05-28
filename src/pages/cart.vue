@@ -130,13 +130,13 @@ export default {
       let selected = item.productSelected;
       if (type == "+") {
         if (quantity >= item.productStock) {
-          alert("庫存不足");
+          this.$message.warning("庫存不足");
           return;
         }
         quantity += 1;
       } else if (type == "-") {
         if (quantity == 1) {
-          alert("商品至少保留一件");
+          this.$message.warning("商品至少保留一件");
           return;
         }
         quantity -= 1;
@@ -156,6 +156,7 @@ export default {
     deleteProduct(item) {
       this.axios.delete(`/carts/${item.productId}`).then(res => {
         this.renderData(res);
+        this.$message.success("刪除成功");
       });
     },
     //購物車下單
@@ -163,7 +164,7 @@ export default {
       // 購物車內品項是否都有選中
       let isCheck = this.list.every(item => !item.productSelected);
       if (isCheck) {
-        alert("請選擇至少一件商品");
+        this.$message.warning("請選擇至少一件商品");
       } else {
         this.$router.push("/order/confirm");
       }

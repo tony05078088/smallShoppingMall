@@ -85,7 +85,7 @@ export default {
         })
         .then(res => {
           console.log(res);
-          alert("註冊成功");
+         this.$message.info("註冊成功");
         })
         .catch(err => {
           console.log(err);
