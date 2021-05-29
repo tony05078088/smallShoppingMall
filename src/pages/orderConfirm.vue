@@ -14,9 +14,13 @@
                   {{ item.receiverProvince }}
                 </div>
                 <div class="action">
-                  <i class="el-icon-delete"></i>
-                  <i class="el-icon-edit"></i>
+                  <i class="el-icon-delete" @click="deleteItem(item)"></i>
+                  <i class="el-icon-edit" @click="editItem(item)"></i>
                 </div>
+              </span>
+              <span class="add">
+                <div class="add-icon"></div>
+                <span>添加新地址</span>
               </span>
             </div>
           </div>
@@ -59,19 +63,34 @@
         </div>
       </div>
     </div>
+    <modal
+      title="確認刪除"
+      btnType="1"
+      :showModal="showDelModal"
+      @cancel="showDelModal = false"
+      @updateModal="submitAddress"
+    >
+      <template v-slot:body>
+        <p>確認刪除此地址嗎</p>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
+import Modal from "../components/Modal";
 export default {
   name: "orderconfirm",
-  components: {},
+  components: {Modal},
   data() {
     return {
       list: [], //收貨地址列表
       cartList: [], //購物車中需要結算的商品列表
       cartTotalPrice: 0,
       count: 0, //商品結算數量
+      checkedItem: {}, //選中的商品對象
+      userAction: "", // 用戶行為 0:新增 1:編輯 2:刪除
+      showDelModal: false, //是否顯示刪除彈框
     };
   },
   mounted() {
@@ -91,6 +110,38 @@ export default {
         this.cartList = list.filter(item => item.productSelected);
         this.cartList.map(item => (this.count += item.quantity));
       });
+    },
+    deleteItem(item) {
+      console.log(item);
+      this.checkedItem = item;
+      this.userAction = 2;
+      this.showDelModal = true;
+    },
+    //地址刪除,編輯,新增功能
+    submitAddress() {
+      let {checkedItem, userAction} = this;
+      let method, url;
+      if (userAction == 0) {
+        method = "post";
+        url = "/shippings";
+      } else if (userAction == 1) {
+        method = "put";
+        url = `/shippings/${checkedItem.id}`;
+      } else {
+        method = "delete";
+        url = `/shippings/${checkedItem.id}`;
+      }
+      this.axios[method](url).then(res => {
+        console.log(res);
+        this.closeModal();
+        this.getAddressList();
+        this.$message.success('操作成功')
+      });
+    },
+    closeModal() {
+      this.checkedItem = {};
+      this.userAction = "";
+      this.showDelModal = false;
     },
   },
 };
@@ -122,7 +173,7 @@ export default {
           height: 40%;
           .address {
             display: flex;
-            justify-content: space-between;
+            //justify-content: space-between;
             height: 70%;
             margin-top: 1%;
             h4 {
@@ -136,8 +187,9 @@ export default {
               width: 21%;
               box-sizing: border-box;
               border: 1px solid #e5e5e5;
+              margin-right: 1%;
               padding: 1%;
-              cursor: pointer;
+              //cursor: pointer;
               &:last-child {
                 margin-right: 3%;
               }
@@ -151,6 +203,28 @@ export default {
                   display: flex;
                   justify-content: space-between;
                   align-items: center;
+                  i:hover {
+                    background-color: black;
+                    cursor: pointer;
+                  }
+                }
+              }
+              &.add {
+                padding: 3% 1%;
+                .add-icon {
+                  width: 50px;
+                  height: 50px;
+                  margin: 0 auto;
+                  background: url("/imgs/icon-add.png") 50% center no-repeat
+                    rgb(224, 224, 224);
+                }
+                span {
+                  display: block;
+                  width: 30%;
+                  height: 30%;
+                  margin: 5% auto;
+                  border: none;
+                  color: rgb(117, 117, 117);
                 }
               }
             }
