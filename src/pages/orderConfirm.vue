@@ -268,16 +268,18 @@ export default {
         this.$message.error("請選擇收貨地址");
         return;
       }
-      this.axios.post("/orders", {
-        shippingId: item.id
-      }).then(res=> {
-        this.$router.push({
-          path: '/order/pay',
-          query: {
-            orderNo:res.orderNo
-          }
+      this.axios
+        .post("/orders", {
+          shippingId: item.id,
         })
-      });
+        .then(res => {
+          this.$router.push({
+            path: "/order/pay",
+            query: {
+              orderNo: res.orderNo,
+            },
+          });
+        });
     },
   },
 };
@@ -286,6 +288,7 @@ export default {
 <style lang="scss">
 @import "../assets/scss/config.scss";
 @import "../assets/scss/button.scss";
+@import "../assets/scss/mixin.scss";
 
 .OrderConfirm {
   width: 100%;
@@ -317,8 +320,7 @@ export default {
               margin-bottom: 5%;
             }
             span {
-              display: inline-block;
-              width: 21%;
+              @include bgImg(21%,auto,"");
               box-sizing: border-box;
               border: 1px solid #e5e5e5;
               margin-right: 1%;
@@ -332,10 +334,8 @@ export default {
                 height: 15%;
                 margin-top: 1.5%;
                 &.action {
+                  @include flex(space-between, center);
                   height: 50%;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
                   i:hover {
                     cursor: pointer;
                   }
@@ -417,9 +417,8 @@ export default {
         .total {
           width: 100%;
           height: 20%;
-          display: flex;
+          @include flex(flex-start, flex-end);
           flex-direction: column;
-          align-items: flex-end;
           border-bottom: 1px solid rgb(245, 245, 245);
           .item {
             width: 100%;
@@ -438,8 +437,7 @@ export default {
           }
         }
         .btn-group {
-          display: flex;
-          justify-content: flex-end;
+          @include flex(flex-end, flex-start)
         }
       }
     }
