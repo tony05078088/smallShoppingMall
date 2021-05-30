@@ -6,7 +6,12 @@
           <div class="address_box">
             <h2>收貨地址</h2>
             <div class="address">
-              <span v-for="(item, index) in list" :key="index">
+              <span
+                v-for="(item, index) in list"
+                :key="index"
+                :class="{checked: index == checkIndex}"
+                @click="checkIndex = index"
+              >
                 <h4>{{ item.receiverName }}</h4>
                 <div class="phone">{{ item.receiverMobile }}</div>
                 <div class="info">
@@ -15,7 +20,7 @@
                 </div>
                 <div class="action">
                   <i class="el-icon-delete" @click="deleteItem(item)"></i>
-                  <i class="el-icon-edit" @click="deleteItem(item)"></i>
+                  <i class="el-icon-edit" @click="editModalAddress(item)"></i>
                 </div>
               </span>
               <span class="add">
@@ -57,8 +62,8 @@
             <div class="item"><span>運費</span> <span>0元</span></div>
           </div>
           <div class="btn-group">
-            <button class="btn btn-default">返回購物車</button>
-            <button class="btn">去結算</button>
+            <a href="/#/cart" class="btn btn-default">返回購物車</a>
+            <a href="javascript:;" class="btn" @click="orderSubmit">去結算</a>
           </div>
         </div>
       </div>
@@ -144,6 +149,7 @@ export default {
   components: {Modal},
   data() {
     return {
+      checkIndex: "", //框框選中
       list: [], //收貨地址列表
       cartList: [], //購物車中需要結算的商品列表
       cartTotalPrice: 0,
@@ -215,7 +221,7 @@ export default {
           errMsg = "請選擇城市";
         } else if (!receiverDistrict || !receiverAddress) {
           errMsg = "請輸入收貨地址";
-        } else if (!/\d{5}/.test(receiverAddress)) {
+        } else if (!/\d{5}/.test(receiverZip)) {
           errMsg = "請輸入5位郵遞區號";
         }
         if (errMsg) {
@@ -250,6 +256,29 @@ export default {
       this.checkedItem = {};
       this.showEditModal = true;
     },
+    editModalAddress(item) {
+      this.userAction = 1;
+      this.checkedItem = item;
+      this.showEditModal = true;
+    },
+    //訂單提交
+    orderSubmit() {
+      let item = this.list[this.checkIndex];
+      if (!item) {
+        this.$message.error("請選擇收貨地址");
+        return;
+      }
+      this.axios.post("/orders", {
+        shippingId: item.id
+      }).then(res=> {
+        this.$router.push({
+          path: '/order/pay',
+          query: {
+            orderNo:res.orderNo
+          }
+        })
+      });
+    },
   },
 };
 </script>
@@ -260,7 +289,6 @@ export default {
 
 .OrderConfirm {
   width: 100%;
-  height: 600px;
   .wrapper {
     width: 100%;
     height: 100%;
@@ -280,7 +308,6 @@ export default {
           height: 40%;
           .address {
             display: flex;
-            //justify-content: space-between;
             height: 70%;
             margin-top: 1%;
             h4 {
@@ -296,7 +323,6 @@ export default {
               border: 1px solid #e5e5e5;
               margin-right: 1%;
               padding: 1%;
-              //cursor: pointer;
               &:last-child {
                 margin-right: 3%;
               }
@@ -311,7 +337,6 @@ export default {
                   justify-content: space-between;
                   align-items: center;
                   i:hover {
-                    background-color: black;
                     cursor: pointer;
                   }
                 }
@@ -334,6 +359,9 @@ export default {
                   border: none;
                   color: rgb(117, 117, 117);
                 }
+              }
+              &.checked {
+                border: 1px solid #ff6600;
               }
             }
           }

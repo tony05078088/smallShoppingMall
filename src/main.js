@@ -37,10 +37,9 @@ axios.interceptors.response.use(response => {
                            }
     return Promise.reject();
   } else {
-           // alert(res.msg);
-           Message.error(res.msg);
-           return Promise.reject();
-         }
+    Message.error(res.msg);
+    return Promise.reject();
+  }
 });
 
 Vue.use(VueLazyLoad, {
