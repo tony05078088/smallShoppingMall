@@ -64,6 +64,48 @@
       </div>
     </div>
     <modal
+      title="確認新增"
+      btnType="1"
+      :showModal="showEditModal"
+      @cancel="showEditModal = false"
+      @updateModal="submitAddress"
+    >
+      <template v-slot:body>
+        <div class="edit-wrap">
+          <div class="item">
+            <input type="text" class="input" placeholder="姓名" />
+            <input type="text" class="input" placeholder="手機號碼" />
+          </div>
+          <div class="item">
+            <select name="province">
+              <option value="北京">北京</option>
+              <option value="天津">天津</option>
+              <option value="河北">河北</option>
+            </select>
+            <select name="city">
+              <option value="北京">北京</option>
+              <option value="天津">天津</option>
+              <option value="河北">石家莊</option>
+            </select>
+            <select name="district">
+              <option value="北京">昌平區</option>
+              <option value="天津">海淀區</option>
+              <option value="河北">東城區</option>
+              <option value="河北">西城區</option>
+              <option value="河北">順義區</option>
+              <option value="河北">房山區</option>
+            </select>
+          </div>
+          <div class="item">
+            <textarea name="street"></textarea>
+          </div>
+          <div class="item">
+            <input type="text" class="input" placeholder="郵遞區號" />
+          </div>
+        </div>
+      </template>
+    </modal>
+    <modal
       title="確認刪除"
       btnType="1"
       :showModal="showDelModal"
@@ -91,6 +133,7 @@ export default {
       checkedItem: {}, //選中的商品對象
       userAction: "", // 用戶行為 0:新增 1:編輯 2:刪除
       showDelModal: false, //是否顯示刪除彈框
+      showEditModal: true, //是否顯示新增或編輯彈框
     };
   },
   mounted() {
@@ -112,7 +155,6 @@ export default {
       });
     },
     deleteItem(item) {
-      console.log(item);
       this.checkedItem = item;
       this.userAction = 2;
       this.showDelModal = true;
@@ -135,7 +177,7 @@ export default {
         console.log(res);
         this.closeModal();
         this.getAddressList();
-        this.$message.success('操作成功')
+        this.$message.success("操作成功");
       });
     },
     closeModal() {
@@ -305,6 +347,36 @@ export default {
           display: flex;
           justify-content: flex-end;
         }
+      }
+    }
+  }
+  .edit-wrap {
+    font-size: 14px;
+    .item {
+      margin-bottom: 15px;
+      input {
+        display: inline-block;
+        width: 45%;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 2%;
+        border: 1px solid #e5e5e5;
+        & + .input {
+          margin-left: 3%;
+        }
+      }
+      select {
+        height: 40px;
+        line-height: 40px;
+        margin-right: 2.5%;
+        border: 1px solid #e5e5e5;
+      }
+      textarea {
+        width: 100%;
+        height: 50px;
+        padding: 1% 0% 1% 1%;
+        border: 1px solid #e5e5e5;
+        box-sizing: border-box;
       }
     }
   }
