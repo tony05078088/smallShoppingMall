@@ -15,11 +15,11 @@
                 </div>
                 <div class="action">
                   <i class="el-icon-delete" @click="deleteItem(item)"></i>
-                  <i class="el-icon-edit" @click="editItem(item)"></i>
+                  <i class="el-icon-edit" @click="deleteItem(item)"></i>
                 </div>
               </span>
               <span class="add">
-                <div class="add-icon"></div>
+                <div class="add-icon" @click="openModalAddress"></div>
                 <span>添加新地址</span>
               </span>
             </div>
@@ -73,21 +73,31 @@
       <template v-slot:body>
         <div class="edit-wrap">
           <div class="item">
-            <input type="text" class="input" placeholder="姓名" />
-            <input type="text" class="input" placeholder="手機號碼" />
+            <input
+              type="text"
+              class="input"
+              placeholder="姓名"
+              v-model="checkedItem.receiverName"
+            />
+            <input
+              type="text"
+              class="input"
+              placeholder="手機號碼"
+              v-model="checkedItem.receiverMobile"
+            />
           </div>
           <div class="item">
-            <select name="province">
+            <select name="province" v-model="checkedItem.receiverProvince">
               <option value="北京">北京</option>
               <option value="天津">天津</option>
               <option value="河北">河北</option>
             </select>
-            <select name="city">
+            <select name="city" v-model="checkedItem.receiverCity">
               <option value="北京">北京</option>
               <option value="天津">天津</option>
               <option value="河北">石家莊</option>
             </select>
-            <select name="district">
+            <select name="district" v-model="checkedItem.receiverDistrict">
               <option value="北京">昌平區</option>
               <option value="天津">海淀區</option>
               <option value="河北">東城區</option>
@@ -97,10 +107,18 @@
             </select>
           </div>
           <div class="item">
-            <textarea name="street"></textarea>
+            <textarea
+              name="street"
+              v-model="checkedItem.receiverAddress"
+            ></textarea>
           </div>
           <div class="item">
-            <input type="text" class="input" placeholder="郵遞區號" />
+            <input
+              type="text"
+              class="input"
+              placeholder="郵遞區號"
+              v-model="checkedItem.receiverZip"
+            />
           </div>
         </div>
       </template>
@@ -133,7 +151,7 @@ export default {
       checkedItem: {}, //選中的商品對象
       userAction: "", // 用戶行為 0:新增 1:編輯 2:刪除
       showDelModal: false, //是否顯示刪除彈框
-      showEditModal: true, //是否顯示新增或編輯彈框
+      showEditModal: false, //是否顯示新增或編輯彈框
     };
   },
   mounted() {
@@ -162,10 +180,13 @@ export default {
     //地址刪除,編輯,新增功能
     submitAddress() {
       let {checkedItem, userAction} = this;
-      let method, url;
+      let method,
+        url,
+        params = {};
       if (userAction == 0) {
         method = "post";
         url = "/shippings";
+        console.log(this.checkedItem);
       } else if (userAction == 1) {
         method = "put";
         url = `/shippings/${checkedItem.id}`;
@@ -173,7 +194,45 @@ export default {
         method = "delete";
         url = `/shippings/${checkedItem.id}`;
       }
-      this.axios[method](url).then(res => {
+      if (userAction == 0 || userAction == 1) {
+        let {
+          receiverName,
+          receiverMobile,
+          receiverProvince,
+          receiverCity,
+          receiverDistrict,
+          receiverAddress,
+          receiverZip,
+        } = this.checkedItem;
+        let errMsg;
+        if (!receiverName) {
+          errMsg = "請輸入收貨人名稱";
+        } else if (!receiverMobile || !/\d{10}/.test(receiverMobile)) {
+          errMsg = "請輸入10位手機號碼";
+        } else if (!receiverProvince) {
+          errMsg = "請選擇省份";
+        } else if (!receiverCity) {
+          errMsg = "請選擇城市";
+        } else if (!receiverDistrict || !receiverAddress) {
+          errMsg = "請輸入收貨地址";
+        } else if (!/\d{5}/.test(receiverAddress)) {
+          errMsg = "請輸入5位郵遞區號";
+        }
+        if (errMsg) {
+          this.$message.error(errMsg);
+          return;
+        }
+        params = {
+          receiverName,
+          receiverMobile,
+          receiverProvince,
+          receiverCity,
+          receiverDistrict,
+          receiverAddress,
+          receiverZip,
+        };
+      }
+      this.axios[method](url, params).then(res => {
         console.log(res);
         this.closeModal();
         this.getAddressList();
@@ -184,6 +243,12 @@ export default {
       this.checkedItem = {};
       this.userAction = "";
       this.showDelModal = false;
+      this.showEditModal = false;
+    },
+    openModalAddress() {
+      this.userAction = 0;
+      this.checkedItem = {};
+      this.showEditModal = true;
     },
   },
 };
@@ -257,6 +322,7 @@ export default {
                   width: 50px;
                   height: 50px;
                   margin: 0 auto;
+                  cursor: pointer;
                   background: url("/imgs/icon-add.png") 50% center no-repeat
                     rgb(224, 224, 224);
                 }
