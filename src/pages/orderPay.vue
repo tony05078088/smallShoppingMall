@@ -7,17 +7,20 @@
           <h2>訂單提交成功! 去付款～</h2>
           <div class="tip">
             <p>請在 <span>30分</span> 內完成支付,超時將取消訂單</p>
-            <p>收貨訊息:</p>
+            <p>收貨訊息: {{ addressInfo }}</p>
           </div>
         </div>
         <div class="order-total">
-          <p>應付總額： <span>1799元</span></p>
+          <p>
+            應付總額： <span>{{ totalfees }}元</span>
+          </p>
           <p>
             訂單詳情
             <i
-              :class="[
-                orderDetailDisplay ? 'el-icon-arrow-up' : 'el-icon-arrow-down',
-              ]"
+              class="el-icon-arrow-up"
+              :class="{
+                down: orderDetailDisplay,
+              }"
               @click="orderDetailDisplay = !orderDetailDisplay"
             ></i>
           </p>
@@ -25,15 +28,23 @@
         <div class="hiddenDetail" v-show="orderDetailDisplay">
           <div class="order_number">
             <span>訂單號</span>
-            <span>66666</span>
+            <span>{{ orderNo }}</span>
           </div>
           <div class="shipping_info">
             <span>收貨訊息</span>
-            <span>66666</span>
+            <span class="detailDescription">{{ addressInfo }}</span>
           </div>
           <div class="goods_info">
             <span>商品名稱</span>
-            <span>66666</span>
+            <span
+              class="items"
+              v-for="(item, index) in orderDetail"
+              :key="index"
+            >
+              <img class="logoPic" v-lazy="item.productImage" alt="" />
+
+              {{ item.productName }}</span
+            >
           </div>
           <div class="invoice_info">
             <span>電子發票</span>
@@ -60,7 +71,25 @@ export default {
   data() {
     return {
       orderDetailDisplay: false,
+      orderNo: this.$route.query.orderNo,
+      addressInfo: "", //收貨人地址訊息
+      orderDetail: [], //訂單詳情,包含商品列表
+      totalfees: 0, //應付總額
     };
+  },
+  methods: {
+    getOrderDetail() {
+      this.axios.get(`/orders/${this.orderNo}`).then(res => {
+        console.log(res);
+        let item = res.shippingVo;
+        this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
+        this.orderDetail = res.orderItemVoList;
+        this.totalfees = res.payment;
+      });
+    },
+  },
+  mounted() {
+    this.getOrderDetail();
   },
 };
 </script>
@@ -129,6 +158,12 @@ export default {
             cursor: pointer;
           }
         }
+        .el-icon-arrow-up {
+          transition: all 0.5s;
+          &.down {
+            transform: rotate(180deg);
+          }
+        }
       }
       .hiddenDetail {
         width: 100%;
@@ -143,6 +178,17 @@ export default {
             display: inline-block;
             width: 10%;
             margin-right: 5%;
+            &.detailDescription {
+              width: 80%;
+            }
+          }
+        }
+        .items {
+          width: 15%;
+          .logoPic {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
           }
         }
       }
