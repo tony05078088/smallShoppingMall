@@ -24,23 +24,31 @@ if (mock) {
 // axios.defaults.baseURL = env.baseURL;
 // console.log(env.baseURL);
 //axios 接口錯誤攔截器
-axios.interceptors.response.use(response => {
-  console.log(response);
-  let res = response.data;
-  let path = location.hash;
-  if (res.status == 0) {
-    return res.data;
-  } else if (res.status == 10) {
-    if (path != "#/index") {
-                             //未登入且頁面不為首頁頁面就跳轉至登錄頁且判斷為失敗
-                             window.location.href = "/#/login";
-                           }
-    return Promise.reject();
-  } else {
-    Message.error(res.msg);
-    return Promise.reject();
+axios.interceptors.response.use(
+  response => {
+    console.log(response);
+    let res = response.data;
+    let path = location.hash;
+    if (res.status == 0) {
+      return res.data;
+    } else if (res.status == 10) {
+      if (path != "#/index") {
+        //未登入且頁面不為首頁頁面就跳轉至登錄頁且判斷為失敗
+        window.location.href = "/#/login";
+      }
+      return Promise.reject();
+    } else {
+      Message.error(res.msg);
+      return Promise.reject();
+    }
+  },
+  err => {
+    //處理http要求錯誤 ex:500
+    let error = err.response;
+    Message.error(error.data.message);
+    return Promise.reject(error);
   }
-});
+);
 
 Vue.use(VueLazyLoad, {
   loading: "/imgs/loading-svg/loading-bars.svg",

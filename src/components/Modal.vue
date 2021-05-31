@@ -33,7 +33,7 @@
             <a href="javascript:;" @click="$emit('updateModal')" class="btn">{{
               confirmText
             }}</a>
-            <a href="javascript:;" @click="$emit('cancel')" class="btn">{{
+            <a href="javascript:;" @click="$emit('cancel')" class="btn btn-default ">{{
               cancelText
             }}</a>
           </div>

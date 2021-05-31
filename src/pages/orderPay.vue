@@ -74,16 +74,31 @@
       :img="QRCodeImg"
       @close="closePayModel"
     ></scan-pay-code>
+    <modal
+      title="支付確認"
+      btnType="3"
+      :showModal="showPayModal"
+      confirmText="查看訂單"
+      cancelText="未支付"
+      @cancel="showPayModal = false"
+      @updateModal="goOrderList"
+    >
+      <template v-slot:body>
+        <p>是否確認完成支付?</p>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import QRCode from "qrcode";
 import ScanPayCode from "../components/ScanPayCode";
+import Modal from "../components/Modal";
 export default {
   name: "order-pay",
   components: {
     ScanPayCode,
+    Modal,
   },
   data() {
     return {
@@ -95,6 +110,8 @@ export default {
       payType: 0, //支付類型 1:支付寶 2:微信支付
       showPay: false, //微信支付qrcode顯示
       QRCodeImg: "", //微信支付二維碼圖片
+      showPayModal: false, //是否顯示二次支付確認彈框
+      T: "", //定時器ID
     };
   },
   methods: {
@@ -126,7 +143,7 @@ export default {
               .then(url => {
                 this.showPay = true;
                 this.QRCodeImg = url;
-                console.log(url);
+                this.loopOrderState();
               })
               .catch(() => {
                 this.$message.error("微信二維碼生成失敗,請稍候重試");
@@ -134,8 +151,27 @@ export default {
           });
       }
     },
+    //關閉微信彈框
     closePayModel() {
+      this.showPayModal = true;
       this.showPay = false;
+      clearInterval(this.T);
+    },
+    goOrderList() {
+      this.$router.push("/order/list");
+    },
+    // 持續查詢當前訂單支付狀態
+    loopOrderState() {
+      this.T = setInterval(() => {
+        this.axios.get(`/orders/${this.orderId}`).then(res => {
+          console.log(res);
+          if (res.status == 20) {
+            //用戶已付款成功
+            clearInterval(this.T);
+            this.goOrderList();
+          }
+        });
+      }, 500);
     },
   },
   mounted() {
@@ -157,7 +193,6 @@ export default {
     flex-direction: column;
     .success {
       width: 94%;
-      //height: 44%;
       flex-wrap: wrap;
       background-color: #ffffff;
       padding: 3%;
