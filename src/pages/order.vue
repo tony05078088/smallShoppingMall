@@ -40,6 +40,9 @@ export default {
     } else if (path == "/order/pay") {
       this.title = "訂單支付";
       this.tips = "請謹防釣魚連接或詐騙電話";
+    } else {
+      this.title = "訂單支付";
+      this.tips = "請謹防釣魚連接或詐騙電話";
     }
   },
 };

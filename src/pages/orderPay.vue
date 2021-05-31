@@ -57,8 +57,16 @@
       <h3>選擇以下支付方式付款</h3>
       <p>支付平台</p>
       <div class="payway">
-        <div class="pay alipay"></div>
-        <div class="pay wechat"></div>
+        <div
+          class="pay alipay"
+          :class="{checked: payType == 1}"
+          @click="paySubmit(1)"
+        ></div>
+        <div
+          class="pay wechat"
+          :class="{checked: payType == 2}"
+          @click="paySubmit(2)"
+        ></div>
       </div>
     </div>
   </div>
@@ -75,17 +83,21 @@ export default {
       addressInfo: "", //收貨人地址訊息
       orderDetail: [], //訂單詳情,包含商品列表
       totalfees: 0, //應付總額
+      payType: 0, //支付類型 1:支付寶 2:微信支付
     };
   },
   methods: {
     getOrderDetail() {
       this.axios.get(`/orders/${this.orderNo}`).then(res => {
-        console.log(res);
         let item = res.shippingVo;
         this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
         this.orderDetail = res.orderItemVoList;
         this.totalfees = res.payment;
       });
+    },
+    paySubmit(type) {
+      this.payType = type;
+      window.open("/#/order/alipay?orderId=" + this.orderNo, "_blank");
     },
   },
   mounted() {
@@ -229,6 +241,9 @@ export default {
         &.wechat {
           background: url("/imgs/pay/icon-wechat.png") no-repeat 50%;
           background-size: 103px 38px;
+        }
+        &.checked {
+          border: 1px solid #ff6700;
         }
       }
     }
