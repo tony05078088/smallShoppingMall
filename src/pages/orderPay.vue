@@ -28,7 +28,7 @@
         <div class="hiddenDetail" v-show="orderDetailDisplay">
           <div class="order_number">
             <span>訂單號</span>
-            <span>{{ orderNo }}</span>
+            <span>{{ orderId }}</span>
           </div>
           <div class="shipping_info">
             <span>收貨訊息</span>
@@ -69,26 +69,37 @@
         ></div>
       </div>
     </div>
+    <scan-pay-code
+      v-if="showPay"
+      :img="QRCodeImg"
+      @close="closePayModel"
+    ></scan-pay-code>
   </div>
 </template>
 
 <script>
+import QRCode from "qrcode";
+import ScanPayCode from "../components/ScanPayCode";
 export default {
   name: "order-pay",
-  components: {},
+  components: {
+    ScanPayCode,
+  },
   data() {
     return {
       orderDetailDisplay: false,
-      orderNo: this.$route.query.orderNo,
+      orderId: this.$route.query.orderNo,
       addressInfo: "", //收貨人地址訊息
       orderDetail: [], //訂單詳情,包含商品列表
       totalfees: 0, //應付總額
       payType: 0, //支付類型 1:支付寶 2:微信支付
+      showPay: false, //微信支付qrcode顯示
+      QRCodeImg: "", //微信支付二維碼圖片
     };
   },
   methods: {
     getOrderDetail() {
-      this.axios.get(`/orders/${this.orderNo}`).then(res => {
+      this.axios.get(`/orders/${this.orderId}`).then(res => {
         let item = res.shippingVo;
         this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
         this.orderDetail = res.orderItemVoList;
@@ -97,7 +108,34 @@ export default {
     },
     paySubmit(type) {
       this.payType = type;
-      window.open("/#/order/alipay?orderId=" + this.orderNo, "_blank");
+      if (this.payType == 1) {
+        //支付寶支付
+        window.open("/#/order/alipay?orderId=" + this.orderId, "_blank");
+      } else {
+        //微信支付
+        this.axios
+          .post("/pay", {
+            orderId: this.orderId,
+            orderName: "Vue模仿小米商城",
+            amount: 0.01,
+            payType: 2,
+          })
+          .then(res => {
+            console.log(res);
+            QRCode.toDataURL(res.content)
+              .then(url => {
+                this.showPay = true;
+                this.QRCodeImg = url;
+                console.log(url);
+              })
+              .catch(() => {
+                this.$message.error("微信二維碼生成失敗,請稍候重試");
+              });
+          });
+      }
+    },
+    closePayModel() {
+      this.showPay = false;
     },
   },
   mounted() {
