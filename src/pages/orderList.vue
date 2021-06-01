@@ -50,6 +50,15 @@
             </div>
           </div>
         </div>
+        <el-pagination
+          class="pagination"
+          background
+          :page-size="pageSize"
+          layout="prev, pager, next"
+          :total="total"
+          @current-change="handleChange"
+        >
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -59,27 +68,36 @@
 import OrderHeader from "../components/OrderHeader";
 import Loading from "../components/Loading";
 import NoData from "../components/NoData";
-
+import {Pagination} from "element-ui";
 export default {
   name: "orderlist",
   components: {
     OrderHeader,
     Loading,
     NoData,
+    [Pagination.name]: Pagination,
   },
   data() {
     return {
       list: [],
       loading: true,
+      pageSize: 5,
+      pageNum: 1, //當前在第幾頁
+      total: 0,
     };
   },
   methods: {
     getOrderList() {
       this.axios
-        .get("/orders")
+        .get("/orders", {
+          params: {
+            pageNum: this.pageNum,
+          },
+        })
         .then(res => {
           this.loading = false;
           this.list = res.list;
+          this.total = res.total;
           console.log(res);
         })
         .catch(() => {
@@ -105,6 +123,10 @@ export default {
         },
       });
     },
+    handleChange(pageNum) {
+      this.pageNum = pageNum;
+      this.getOrderList();
+    },
   },
   mounted() {
     this.getOrderList();
@@ -124,7 +146,7 @@ export default {
       margin: 0 auto;
       .order {
         height: 25%;
-        margin-bottom: 5%;
+        margin-bottom: 3%;
         background-color: #ffffff;
         border: 1px solid #d7d7d7;
         .order_title {
@@ -187,6 +209,13 @@ export default {
           }
         }
       }
+      .pagination {
+        text-align: right;
+        margin-bottom: 2%;
+      }
+         .el-pagination.is-background .el-pager li:not(.disabled).active {
+          background-color: #ff6600;
+        }
     }
   }
 }
