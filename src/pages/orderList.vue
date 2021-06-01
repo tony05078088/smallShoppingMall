@@ -59,7 +59,7 @@
           @current-change="handleChange"
         >
         </el-pagination>
-        <div class="load-more">
+        <div class="load-more" v-if="showNextPage">
           <el-button type="primary" :loading="loading" @click="loadMore"
             >加載更多</el-button
           >
@@ -106,6 +106,7 @@ export default {
       pageNum: 1, //當前在第幾頁
       total: 0,
       busy: false, //滾動加載,是否觸發
+      showNextPage: true, //加載更多,是否顯示按鈕
     };
   },
   methods: {
@@ -123,6 +124,7 @@ export default {
           console.log(res);
           this.loading = false;
           this.busy = false;
+          this.showNextPage = res.hasNextPage;
           //拼接array,將新的資料拼到舊的array後面成為新array
           this.list = this.list.concat(res.list);
           this.total = res.total;
