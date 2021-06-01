@@ -59,6 +59,11 @@
           @current-change="handleChange"
         >
         </el-pagination>
+        <div class="load-more">
+          <el-button type="primary" :loading="loading" @click="loadMore"
+            >加載更多</el-button
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +73,7 @@
 import OrderHeader from "../components/OrderHeader";
 import Loading from "../components/Loading";
 import NoData from "../components/NoData";
-import {Pagination} from "element-ui";
+import {Pagination, Button} from "element-ui";
 export default {
   name: "orderlist",
   components: {
@@ -76,11 +81,12 @@ export default {
     Loading,
     NoData,
     [Pagination.name]: Pagination,
+    [Button.name]: Button,
   },
   data() {
     return {
       list: [],
-      loading: true,
+      loading: false,
       pageSize: 5,
       pageNum: 1, //當前在第幾頁
       total: 0,
@@ -88,15 +94,18 @@ export default {
   },
   methods: {
     getOrderList() {
+      this.loading = true;
       this.axios
         .get("/orders", {
           params: {
+            pageSize: 10,
             pageNum: this.pageNum,
           },
         })
         .then(res => {
           this.loading = false;
-          this.list = res.list;
+          //拼接array,將新的資料拼到舊的array後面成為新array
+          this.list = this.list.concat(res.list);
           this.total = res.total;
           console.log(res);
         })
@@ -125,6 +134,10 @@ export default {
     },
     handleChange(pageNum) {
       this.pageNum = pageNum;
+      this.getOrderList();
+    },
+    loadMore() {
+      this.pageNum += 1;
       this.getOrderList();
     },
   },
@@ -213,9 +226,17 @@ export default {
         text-align: right;
         margin-bottom: 2%;
       }
-         .el-pagination.is-background .el-pager li:not(.disabled).active {
-          background-color: #ff6600;
-        }
+      .el-pagination.is-background .el-pager li:not(.disabled).active {
+        background-color: #ff6600;
+      }
+      .load-more {
+        text-align: center;
+      }
+      .el-button--primary {
+        color: #fff;
+        border-color: #ff6600;
+        background-color: #ff6600;
+      }
     }
   }
 }

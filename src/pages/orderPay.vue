@@ -105,7 +105,7 @@ export default {
   components: {
     ScanPayCode,
     Modal,
-    OrderHeader
+    OrderHeader,
   },
   data() {
     return {
