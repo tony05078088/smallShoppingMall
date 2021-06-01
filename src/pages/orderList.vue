@@ -50,7 +50,7 @@
             </div>
           </div>
         </div>
-        <el-pagination
+        <!-- <el-pagination
           class="pagination"
           background
           :page-size="pageSize"
@@ -63,6 +63,19 @@
           <el-button type="primary" :loading="loading" @click="loadMore"
             >加載更多</el-button
           >
+        </div> -->
+
+        <div
+          class="scoll-more"
+          v-infinite-scroll="scrollMore"
+          infinite-scroll-disabled="busy"
+          infinite-scroll-distance="500"
+        >
+          <img
+            src="/imgs/loading-svg/loading-spinning-bubbles.svg"
+            alt=""
+            v-show="loading"
+          />
         </div>
       </div>
     </div>
@@ -74,6 +87,7 @@ import OrderHeader from "../components/OrderHeader";
 import Loading from "../components/Loading";
 import NoData from "../components/NoData";
 import {Pagination, Button} from "element-ui";
+import infiniteScroll from "vue-infinite-scroll";
 export default {
   name: "orderlist",
   components: {
@@ -83,18 +97,21 @@ export default {
     [Pagination.name]: Pagination,
     [Button.name]: Button,
   },
+  directives: {infiniteScroll},
   data() {
     return {
       list: [],
-      loading: false,
+      loading: true,
       pageSize: 5,
       pageNum: 1, //當前在第幾頁
       total: 0,
+      busy: false, //滾動加載,是否觸發
     };
   },
   methods: {
     getOrderList() {
       this.loading = true;
+      this.busy = true;
       this.axios
         .get("/orders", {
           params: {
@@ -103,11 +120,12 @@ export default {
           },
         })
         .then(res => {
+          console.log(res);
           this.loading = false;
+          this.busy = false;
           //拼接array,將新的資料拼到舊的array後面成為新array
           this.list = this.list.concat(res.list);
           this.total = res.total;
-          console.log(res);
         })
         .catch(() => {
           this.loading = false;
@@ -132,13 +150,45 @@ export default {
         },
       });
     },
+    //換頁面第一種方法:分頁器
     handleChange(pageNum) {
       this.pageNum = pageNum;
       this.getOrderList();
     },
+    //換頁面第二種方法:加載更多:按鈕
     loadMore() {
       this.pageNum += 1;
       this.getOrderList();
+    },
+    //換頁面第三種方法:通過npm插件滑動時加載
+    scrollMore() {
+      this.busy = true;
+      console.log("scollFire");
+      setTimeout(() => {
+        this.pageNum += 1;
+        this.getList();
+      }, 500);
+    },
+    //專給scrollMore使用
+    getList() {
+      this.loading = true;
+      this.axios
+        .get("/orders", {
+          params: {
+            pageSize: 10,
+            pageNum: this.pageNum,
+          },
+        })
+        .then(res => {
+          //拼接array,將新的資料拼到舊的array後面成為新array
+          this.list = this.list.concat(res.list);
+          this.loading = false;
+          if (res.hasNextPage) {
+            this.busy = false;
+          } else {
+            this.busy = true;
+          }
+        });
     },
   },
   mounted() {
@@ -229,7 +279,8 @@ export default {
       .el-pagination.is-background .el-pager li:not(.disabled).active {
         background-color: #ff6600;
       }
-      .load-more {
+      .load-more,
+      .scoll-more {
         text-align: center;
       }
       .el-button--primary {

@@ -100,6 +100,7 @@ import QRCode from "qrcode";
 import ScanPayCode from "../components/ScanPayCode";
 import Modal from "../components/Modal";
 import OrderHeader from "../components/OrderHeader";
+
 export default {
   name: "order-pay",
   components: {
