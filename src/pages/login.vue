@@ -168,8 +168,8 @@ export default {
       }
       .btn {
         width: 100%;
-        line-height: 15%;
-        height: 15%;
+        line-height: 30px;
+        height: 30px;
         margin-top: 10%;
         background-color: $colorA;
         font-size: 1rem;

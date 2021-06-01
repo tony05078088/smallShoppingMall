@@ -1,5 +1,10 @@
 <template>
   <div class="orderPay">
+    <order-header title="訂單支付">
+      <template v-slot:tips>
+        <span>請謹防釣魚連接或詐騙電話</span>
+      </template>
+    </order-header>
     <div class="messageBox">
       <div class="success">
         <div class="successImg"></div>
@@ -94,11 +99,13 @@
 import QRCode from "qrcode";
 import ScanPayCode from "../components/ScanPayCode";
 import Modal from "../components/Modal";
+import OrderHeader from "../components/OrderHeader";
 export default {
   name: "order-pay",
   components: {
     ScanPayCode,
     Modal,
+    OrderHeader
   },
   data() {
     return {

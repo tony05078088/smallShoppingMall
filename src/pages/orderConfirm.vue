@@ -1,5 +1,10 @@
 <template>
   <div class="OrderConfirm">
+    <order-header title="訂單確認">
+      <template v-slot:tips>
+        <span>請填寫收貨地址</span>
+      </template>
+    </order-header>
     <div class="wrapper">
       <div class="container">
         <div class="order_box">
@@ -144,9 +149,10 @@
 
 <script>
 import Modal from "../components/Modal";
+import OrderHeader from "../components/OrderHeader";
 export default {
   name: "orderconfirm",
-  components: {Modal},
+  components: {Modal, OrderHeader},
   data() {
     return {
       checkIndex: "", //框框選中
@@ -320,7 +326,7 @@ export default {
               margin-bottom: 5%;
             }
             span {
-              @include bgImg(21%,auto,"");
+              @include bgImg(21%, auto, "");
               box-sizing: border-box;
               border: 1px solid #e5e5e5;
               margin-right: 1%;
@@ -437,7 +443,7 @@ export default {
           }
         }
         .btn-group {
-          @include flex(flex-end, flex-start)
+          @include flex(flex-end, flex-start);
         }
       }
     }
