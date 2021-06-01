@@ -30,3 +30,8 @@
   background: url($img) no-repeat center;
   background-size: contain;
 }
+
+@mixin wH($w: 0, $h: 0) {
+  width: $w;
+  height: $h;
+}

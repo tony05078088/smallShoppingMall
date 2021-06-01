@@ -5,7 +5,9 @@
         <span>請謹防釣魚連接或詐騙電話</span>
       </template>
     </order-header>
-    <div class="wrapper">
+    <loading v-if="loading"></loading>
+    <no-data v-if="!loading && list.length == 0"></no-data>
+    <div class="wrapper" v-else>
       <div class="container">
         <div class="order" v-for="(item, index) in list" :key="index">
           <div class="order_title">
@@ -55,22 +57,34 @@
 
 <script>
 import OrderHeader from "../components/OrderHeader";
+import Loading from "../components/Loading";
+import NoData from "../components/NoData";
+
 export default {
   name: "orderlist",
   components: {
     OrderHeader,
+    Loading,
+    NoData,
   },
   data() {
     return {
       list: [],
+      loading: true,
     };
   },
   methods: {
     getOrderList() {
-      this.axios.get("/orders").then(res => {
-        this.list = res.list;
-        console.log(res);
-      });
+      this.axios
+        .get("/orders")
+        .then(res => {
+          this.loading = false;
+          this.list = res.list;
+          console.log(res);
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
     goPay(orderNo) {
       console.log(orderNo);
@@ -99,6 +113,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../assets/scss/mixin.scss";
 .orderlist {
   .wrapper {
     width: 100%;
@@ -113,8 +128,7 @@ export default {
         background-color: #ffffff;
         border: 1px solid #d7d7d7;
         .order_title {
-          width: 94%;
-          height: 30%;
+          @include wH(94%, 30%);
           padding: 1% 3%;
           display: flex;
           justify-content: space-between;
@@ -152,12 +166,10 @@ export default {
           justify-content: space-between;
           align-items: center;
           .detail_left {
-            width: 30%;
-            height: 100%;
+            @include wH(30%, 100%);
             display: flex;
             img {
-              width: 50px;
-              height: 50px;
+              @include wH(50px, 50px);
             }
             .detail_item {
               height: 100%;
