@@ -14,4 +14,6 @@ module.exports = {
   },
   // ESLint關閉
   // lintOnSave: false
+
+  productionSourceMap: false,
 };

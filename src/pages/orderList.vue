@@ -50,7 +50,7 @@
             </div>
           </div>
         </div>
-        <!-- <el-pagination
+        <el-pagination
           class="pagination"
           background
           :page-size="pageSize"
@@ -59,11 +59,11 @@
           @current-change="handleChange"
         >
         </el-pagination>
-        <div class="load-more" v-if="showNextPage">
+        <!-- <div class="load-more" v-if="showNextPage">
           <el-button type="primary" :loading="loading" @click="loadMore"
             >加載更多</el-button
           >
-        </div> -->
+        </div>
 
         <div
           class="scoll-more"
@@ -76,7 +76,7 @@
             alt=""
             v-show="loading"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
