@@ -15,5 +15,8 @@ module.exports = {
   // ESLint關閉
   // lintOnSave: false
 
-  productionSourceMap: false,
+  productionSourceMap: false, //本地設成true,可看源碼;打包上線設false,看不到
+  chainWebpack: config => {
+    config.plugins.delete("prefetch");
+  },
 };

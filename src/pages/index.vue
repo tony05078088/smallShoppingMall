@@ -244,7 +244,6 @@ export default {
           },
         })
         .then(res => {
-          console.log(res);
           // slice不會影響原array,splice會影響
           res.list = res.list.slice(6, 14);
           this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)];
