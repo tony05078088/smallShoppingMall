@@ -40,37 +40,33 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {ref} from "vue";
+import {useStore} from "vuex";
+import {message} from "ant-design-vue";
+import {useRouter} from "vue-router";
+import cookie from "vue-cookie";
+import axios from "axios";
 export default {
   name: "login",
-  //data宣告為一個function,避免頁面之間及組件之間數據 全局的竄用
-  data() {
-    return {
-      username: "",
-      password: "",
-      userId: "",
-    };
-  },
-  methods: {
-    // saveUserName === this.$store.dispatch('saveUserName)
-    ...mapActions(["saveUserName"]),
-    login() {
-      // 因變量掛載在Vue實例上,可使用解構
-      let {username, password} = this;
-      this.axios
+  setup() {
+    let username = ref("");
+    let password = ref("");
+    let userId = ref("");
+    let store = useStore();
+    let router = useRouter();
+    const login = () => {
+      axios
         .post("/user/login", {
-          username,
-          password,
+          username: username.value,
+          password: password.value,
         })
         .then(res => {
           console.log(res);
-          this.$cookie.set("userId", res.id, {
+          cookie.set("userId", res.id, {
             expires: "Session",
           });
-          //todo: 保存使用者名稱
-          //this.$store.dispatch("saveUserName", res.username);
-          this.saveUserName(res.username);
-          this.$router.push({
+          store.commit("saveUserName", res.username);
+          router.push({
             // path:'/index',
             //query傳參數用path,params傳參要用name,對應的是路由的名稱
             name: "index",
@@ -82,9 +78,9 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-    register() {
-      this.axios
+    };
+    const register = () => {
+      axios
         .post("/user/register", {
           username: "tony",
           password: "123456",
@@ -92,12 +88,19 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.$message.info("註冊成功");
+          message.info("註冊成功");
         })
         .catch(err => {
           console.log(err);
         });
-    },
+    };
+    return {
+      username,
+      password,
+      userId,
+      login,
+      register,
+    };
   },
 };
 </script>

@@ -40,7 +40,7 @@
                       <img v-lazy="item.mainImage" :alt="item.subtitle" />
                     </div>
                     <div class="pro-name">{{ item.name }}</div>
-                    <div class="pro-price">{{ item.price | currency }}</div>
+                    <div class="pro-price">{{ item.price }}</div>
                   </a>
                 </li>
               </ul>
@@ -123,42 +123,40 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {reactive, computed, onMounted} from "vue";
+// import {reactive} from "@vue/reactivity";
+// import { computed, onMounted } from '@vue/runtime-core';
+import axios from "axios";
+import {useStore} from "vuex";
+import {useRouter,useRoute } from "vue-router";
+import cookie from "vue-cookie";
+import {message} from "ant-design-vue";
 export default {
   name: "nav-header",
-  data() {
-    return {
-      phoneList: [],
+  setup() {
+    let store = useStore();
+    let router = useRouter();
+    let route = useRoute();
+    let  phoneList = reactive([]);
+    let username = computed(() => {
+      return store.state.username;
+    });
+    let cartCount = computed(() => {
+      return store.state.cartCount;
+    });
+    //mounted hooks
+    onMounted(() => {
+      getProductList();
+      let params = route.params;
+      if (params && params.from == "login") {
+        getCartCount();
+      }
+    });
+    const login = () => {
+      router.push("/login");
     };
-  },
-  computed: {
-    ...mapState(["username", "cartCount"]),
-    // username() {
-    //   return this.$store.state.username;
-    // },
-    // cartCount() {
-    //   return this.$store.state.cartCount;
-    // },
-  },
-  filters: {
-    currency(val) {
-      if (!val) return "0.00";
-      return "$" + val.toFixed(2) + "元";
-    },
-  },
-  mounted() {
-    this.getProductList();
-    let params = this.$route.params;
-    if (params && params.from == "login") {
-      this.getCartCount();
-    }
-  },
-  methods: {
-    login() {
-      this.$router.push("/login");
-    },
-    getProductList() {
-      this.axios
+    const getProductList = () => {
+      axios
         .get("/products", {
           params: {
             categoryId: 100012,
@@ -170,30 +168,40 @@ export default {
           // if (res.list.length > 6) {
           //   this.phoneList = res.list.slice(0, 6);
           // }
-          this.phoneList = res.list;
+          phoneList.value = res.list;
         })
         .catch(err => {
           console.log(err);
         });
-    },
-    goToCart() {
-      this.$router.push("/cart");
-    },
-    logout() {
-      this.axios.post("/user/logout").then(() => {
-        this.$message("登出成功");
+    };
+    const goToCart = () => {
+      router.push("/cart");
+    };
+    const logout = () => {
+      axios.post("/user/logout").then(() => {
+        message("登出成功");
         // 將cookie的值設為空
-        this.$cookie.set("userId", "", {expires: "-1"});
+        cookie.set("userId", "", {expires: "-1"});
         //將人名及購物車數量清空
-        this.$store.dispatch("saveUserName", "");
-        this.$store.dispatch("saveCartCount", 0);
+        store.commit("saveUserName", "");
+        store.commit("saveCartCount", 0);
       });
-    },
-    getCartCount() {
-      this.axios.get("/carts/products/sum").then((res = 0) => {
-        this.$store.dispatch("saveCartCount", res);
+    };
+    const getCartCount = () => {
+      axios.get("/carts/products/sum").then((res = 0) => {
+        store.commit("saveCartCount", res);
       });
-    },
+    };
+    return {
+      getProductList,
+      goToCart,
+      login,
+      logout,
+      getCartCount,
+       phoneList,
+      username,
+      cartCount,
+    };
   },
 };
 </script>

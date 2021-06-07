@@ -1,18 +1,16 @@
+import Antd, { message } from "ant-design-vue";
+//引入ant-design 系統預設css檔
+import "ant-design-vue/dist/antd.css";
 import axios from "axios";
-import {Message} from "element-ui";
-//引入element UI 系統預設css檔
-import "element-ui/lib/theme-chalk/index.css";
-import Vue from "vue";
-import VueCookie from "vue-cookie";
-import VueLazyLoad from "vue-lazyload";
+import { createApp } from "vue";
 import App from "./App.vue";
-import env from "./env";
+//import env from "./env";
 import router from "./router";
 import store from "./store";
 // 掛載axios到vue實例上
-Vue.prototype.axios = axios;
+//Vue.prototype.axios = axios;
 //根據前端跨域方式做調整 Ex: /a/b  :  /api/a/b => /a/b
-//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "/api";
 axios.defaults.timeout = 8000;
 
 // mock 開關
@@ -21,8 +19,8 @@ if (mock) {
   require("./mock/api");
 }
 // 根據環境變量不同獲取不同的請求地址
- axios.defaults.baseURL = env.baseURL;
- console.log(env.baseURL);
+// axios.defaults.baseURL = env.baseURL;
+// console.log(env.baseURL);
 //axios 接口錯誤攔截器
 axios.interceptors.response.use(
   response => {
@@ -38,27 +36,23 @@ axios.interceptors.response.use(
       }
       return Promise.reject();
     } else {
-      Message.error(res.msg);
+      message.error(res.msg);
       return Promise.reject();
     }
   },
   err => {
     //處理http要求錯誤 ex:500
     let error = err.response;
-    Message.error(error.data.message);
+    message.error(error.data.message);
     return Promise.reject(error);
   }
 );
 
-Vue.use(VueLazyLoad, {
-  loading: "/imgs/loading-svg/loading-bars.svg",
-});
-Vue.use(VueCookie);
-//生產環境提示
-Vue.config.productionTip = false;
-Vue.prototype.$message = Message;
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount("#app");
+// Vue.use(VueLazyLoad, {
+//   loading: "/imgs/loading-svg/loading-bars.svg",
+// });
+createApp(App)
+  .use(Antd)
+  .use(router)
+  .use(store)
+  .mount("#app");
