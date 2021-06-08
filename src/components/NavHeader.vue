@@ -236,14 +236,14 @@ export default {
       height: 112px;
       .header-menu {
         display: inline-block;
-        width: 643px;
-        padding-left: 209px;
+        width: 100%;
+        padding-left: 10%;
         .item-menu {
           display: inline-block;
           color: #333333;
           font-weight: bold;
           font-size: 16px;
-          line-height: 112px;
+          //line-height: 112px;
           margin-right: 20px;
           span {
             cursor: pointer;
@@ -259,7 +259,7 @@ export default {
             position: absolute;
             top: 112px;
             left: 0;
-            width: 1226px;
+            width: 100%;
             height: 0;
             opacity: 0;
             overflow: hidden;
@@ -322,7 +322,8 @@ export default {
             border: none;
             box-sizing: border-box;
             border-right: 1px solid #e0e0e0;
-            width: 264px;
+            //width: 264px;
+            width: 50%;
             height: 50px;
             padding-left: 14px;
           }
@@ -330,6 +331,60 @@ export default {
             @include bgImg(18px, 18px, "/imgs/icon-search.png");
             margin-left: 17px;
           }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    font-size: 8px;
+    .nav-topbar {
+      .container {
+        height: 100%;
+        .topbar-menu {
+          width: 56%;
+          height: 100%;
+          a {
+            font-size: 8px;
+            margin-right: 0.5%;
+          }
+        }
+        .topbar-user {
+          display: flex;
+          text-align: right;
+          width: 50%;
+          height: 100%;
+          a {
+            font-size: 8px;
+            margin-right: 0.5%;
+            &.my-cart {
+               width: 25%;
+               height: 100%;
+              .icon-cart {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .nav-header {
+      height: 50%;
+      .container {
+        height: 30%;
+        .header-menu {
+          width: 80%;
+          .item-menu {
+            font-size: 8px;
+            margin-right: 0.5%;
+          }
+        }
+        .header-search {
+          width: 30%;
+          height: 30%;
         }
       }
     }
