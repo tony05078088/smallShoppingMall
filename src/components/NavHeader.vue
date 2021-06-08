@@ -32,12 +32,12 @@
               <ul>
                 <li
                   class="product"
-                  v-for="(item, index) in phoneList"
+                  v-for="(item, index) in phoneList.value"
                   :key="index"
                 >
                   <a :href="'/#/product' + item.id" target="_blank">
                     <div class="pro-img">
-                      <img v-lazy="item.mainImage" :alt="item.subtitle" />
+                      <img :src="item.mainImage" :alt="item.subtitle" />
                     </div>
                     <div class="pro-name">{{ item.name }}</div>
                     <div class="pro-price">{{ item.price }}</div>
@@ -56,7 +56,7 @@
                 <li class="product">
                   <a href="" target="_blank">
                     <div class="pro-img">
-                      <img v-lazy="'/imgs/nav-img/nav-3-1.jpg'" alt="" />
+                      <img src="/imgs/nav-img/nav-3-1.jpg" alt="" />
                     </div>
                     <div class="pro-name">小米壁畫電視</div>
                     <div class="pro-price">6999元</div>
@@ -128,7 +128,7 @@ import {reactive, computed, onMounted} from "vue";
 // import { computed, onMounted } from '@vue/runtime-core';
 import axios from "axios";
 import {useStore} from "vuex";
-import {useRouter,useRoute } from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 import cookie from "vue-cookie";
 import {message} from "ant-design-vue";
 export default {
@@ -137,7 +137,7 @@ export default {
     let store = useStore();
     let router = useRouter();
     let route = useRoute();
-    let  phoneList = reactive([]);
+    let phoneList = reactive([]);
     let username = computed(() => {
       return store.state.username;
     });
@@ -198,7 +198,7 @@ export default {
       login,
       logout,
       getCartCount,
-       phoneList,
+      phoneList,
       username,
       cartCount,
     };

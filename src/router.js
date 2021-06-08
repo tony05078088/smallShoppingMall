@@ -1,5 +1,6 @@
 import {createRouter, createWebHashHistory} from "vue-router";
 import Home from "../src/pages/home";
+import Index from "../src/pages/index";
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -7,24 +8,24 @@ export default createRouter({
       path: "/",
       name: "home",
       component: Home,
-      // redirect: "/index",
-      // children: [
-      //   {
-      //     path: "/index",
-      //     name: "index",
-      //     component: Index,
-      //   },
-      //   {
-      //     path: "/product/:id",
-      //     name: "product",
-      //     component: () => import("./pages/product.vue"),
-      //   },
-      //   {
-      //     path: "/detail/:id",
-      //     name: "detail",
-      //     component: () => import("./pages/detail.vue"),
-      //   },
-      // ],
+      redirect: "/index",
+      children: [
+        {
+          path: "/index",
+          name: "index",
+          component: Index,
+        },
+        {
+          path: "/product/:id",
+          name: "product",
+          component: () => import("./pages/product.vue"),
+        },
+        {
+          path: "/detail/:id",
+          name: "detail",
+          component: () => import("./pages/detail.vue"),
+        },
+      ],
     },
     {
       path: "/login",

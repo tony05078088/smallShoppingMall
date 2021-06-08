@@ -40,10 +40,10 @@ export default {
       this.isFixed = scrollTop > 152 ? true : false;
     },
   },
-  destroyed() {
-    // 觸發的function必須獨立抽取,否則是無法remove,第三個參數為判斷冒泡或捕獲,false為冒泡
-    window.removeEventListener("scroll", this.initHeight, false);
-  },
+  // destroyed() {
+  //   // 觸發的function必須獨立抽取,否則是無法remove,第三個參數為判斷冒泡或捕獲,false為冒泡
+  //   window.removeEventListener("scroll", this.initHeight, false);
+  // },
 };
 </script>
 

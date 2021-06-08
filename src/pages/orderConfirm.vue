@@ -38,7 +38,7 @@
             <h2>商品</h2>
             <div class="detail" v-for="(item, index) in cartList" :key="index">
               <span class="name">
-                <img v-lazy="item.productMainImage" alt="" />
+                <img :src="item.productMainImage" alt="" />
                 {{ item.productName }} - {{ item.productSubtitle }}
               </span>
               <span class="quantity">

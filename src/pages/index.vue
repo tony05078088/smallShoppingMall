@@ -54,14 +54,12 @@
             </li>
           </ul>
         </div>
-        <swiper :options="swiperOptions">
-          <swiper-slide v-for="(item, index) in slideList" :key="index">
+
+        <a-carousel autoplay>
+          <div v-for="(item, index) in slideList" :key="index">
             <a :href="'/#/product/' + item.id"><img :src="item.img"/></a>
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
-        </swiper>
+          </div>
+        </a-carousel>
       </div>
       <div class="ads-box">
         <a
@@ -69,12 +67,12 @@
           v-for="(item, index) in adsList"
           :key="index"
         >
-          <img v-lazy="item.img" alt="" />
+          <img :src="item.img" alt="" />
         </a>
       </div>
       <div class="banner">
         <a href="/#/product/30"></a>
-        <img v-lazy="'/imgs/banner-1.png'" alt="" />
+        <img src="/imgs/banner-1.png" alt="" />
       </div>
     </div>
     <div class="product-box">
@@ -83,17 +81,17 @@
         <div class="wrapper">
           <div class="banner-left">
             <a href="/#/product/35">
-              <img v-lazy="'/imgs/mix-alpha.jpg'" alt="" />
+              <img src="/imgs/mix-alpha.jpg" alt="" />
             </a>
           </div>
           <div class="list-box">
-            <div class="list" v-for="(arr, i) in phoneList" :key="i">
+            <div class="list" v-for="(arr, i) in phoneList.value" :key="i">
               <div class="item" v-for="(item, index) in arr" :key="index">
                 <span :class="[index % 2 == 0 ? 'new-pro' : 'kill-pro']">{{
                   index % 2 == 0 ? "新品" : "秒殺"
                 }}</span>
                 <div class="item-img">
-                  <img v-lazy="item.mainImage" alt="" />
+                  <img :src="item.mainImage" alt="" />
                 </div>
                 <div class="item-info">
                   <h3>{{ item.name }}</h3>
@@ -130,113 +128,92 @@
 <script>
 import ServiceBar from "../components/ServiceBar";
 import Modal from "../components/Modal";
-import {Swiper, SwiperSlide} from "vue-awesome-swiper";
-import "swiper/css/swiper.css";
+import axios from "axios";
+import {useStore} from "vuex";
+import {onMounted, reactive, ref} from "vue";
+import {useRouter} from "vue-router";
 export default {
   name: "index",
   components: {
-    Swiper,
-    SwiperSlide,
     ServiceBar,
     Modal,
   },
-  data() {
-    return {
-      swiperOptions: {
-        autoplay: true,
-        loop: true,
-        effect: "cube",
-        cubeEffect: {
-          slideShadows: true,
-          shadow: true,
-          shadowOffset: 100,
-          shadowScale: 0.6,
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
+  setup() {
+    let store = useStore();
+    let router = useRouter();
+    let slideList = reactive([
+      {
+        id: "42",
+        img: "/imgs/slider/slide-1.jpg",
       },
-      slideList: [
+      {
+        id: "45",
+        img: "/imgs/slider/slide-2.jpg",
+      },
+      {
+        id: "46",
+        img: "/imgs/slider/slide-3.jpg",
+      },
+      {
+        id: "",
+        img: "/imgs/slider/slide-4.jpg",
+      },
+      {
+        id: "",
+        img: "/imgs/slider/slide-5.jpg",
+      },
+    ]);
+    let menuList = reactive([
+      [
         {
-          id: "42",
-          img: "/imgs/slider/slide-1.jpg",
+          id: 30,
+          img: "/imgs/item-box-1.png",
+          name: "小米CC9",
         },
         {
-          id: "45",
-          img: "/imgs/slider/slide-2.jpg",
+          id: 31,
+          img: "/imgs/item-box-2.png",
+          name: "小米青春版",
         },
         {
-          id: "46",
-          img: "/imgs/slider/slide-3.jpg",
+          id: 32,
+          img: "/imgs/item-box-3.jpg",
+          name: "Remmi K20 PRO",
         },
-        {
-          id: "",
-          img: "/imgs/slider/slide-4.jpg",
-        },
-        {
-          id: "",
-          img: "/imgs/slider/slide-5.jpg",
-        },
-      ],
-      menuList: [
-        [
-          {
-            id: 30,
-            img: "/imgs/item-box-1.png",
-            name: "小米CC9",
-          },
-          {
-            id: 31,
-            img: "/imgs/item-box-2.png",
-            name: "小米青春版",
-          },
-          {
-            id: 32,
-            img: "/imgs/item-box-3.jpg",
-            name: "Remmi K20 PRO",
-          },
-          {
-            id: 33,
-            img: "/imgs/item-box-4.jpg",
-            name: "移動4G專區",
-          },
-        ],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-      ],
-      adsList: [
         {
           id: 33,
-          img: "/imgs/ads/ads-1.png",
-        },
-        {
-          id: 48,
-          img: "/imgs/ads/ads-2.jpg",
-        },
-        {
-          id: 45,
-          img: "/imgs/ads/ads-3.png",
-        },
-        {
-          id: 47,
-          img: "/imgs/ads/ads-4.jpg",
+          img: "/imgs/item-box-4.jpg",
+          name: "移動4G專區",
         },
       ],
-      phoneList: [],
-      showModal: false,
-    };
-  },
-  methods: {
-    init() {
-      this.axios
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    let adsList = reactive([
+      {
+        id: 33,
+        img: "/imgs/ads/ads-1.png",
+      },
+      {
+        id: 48,
+        img: "/imgs/ads/ads-2.jpg",
+      },
+      {
+        id: 45,
+        img: "/imgs/ads/ads-3.png",
+      },
+      {
+        id: 47,
+        img: "/imgs/ads/ads-4.jpg",
+      },
+    ]);
+    let phoneList = reactive([]);
+    let showModal = ref(false);
+    const init = async () => {
+      axios
         .get("products", {
           params: {
             categoryId: 100012,
@@ -246,36 +223,50 @@ export default {
         .then(res => {
           // slice不會影響原array,splice會影響
           res.list = res.list.slice(6, 14);
-          this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)];
+          phoneList.value = [res.list.slice(0, 4), res.list.slice(4, 8)];
+          console.log(phoneList);
         })
         .catch(err => {
           console.log(err);
         });
-    },
-    addCart(id) {
-      console.log(id);
-      this.axios
-        .post("/carts", {
-          productId: id,
-          selected: true,
-        })
-        .then(res => {
-          console.log(res);
-          this.showModal = true;
-          this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
-        })
-        .catch(err => {
-          console.log(err);
-          this.showModal = true;
-        });
-    },
-    updateModal() {
-      this.showModal = false;
-      this.$router.push("/cart");
-    },
-  },
-  mounted() {
-    this.init();
+      // res.list = res.list.slice(6, 14);
+      // console.log(res.list);
+      // phoneList.value = [res.list.slice(0, 4), res.list.slice(4, 8)];
+    };
+    const addCart = async id => {
+      const res = await axios.post("/carts", {
+        productId: id,
+        selected: true,
+      });
+      // .then(res => {
+      //   console.log(res);
+      //   showModal = true;
+      //   store.dispatch("saveCartCount", res.cartTotalQuantity);
+      // })
+      // .catch(err => {
+      //   console.log(err);
+      //   showModal = true;
+      // });
+      showModal = true;
+      store.dispatch("saveCartCount", res.cartTotalQuantity);
+    };
+    const updateModal = () => {
+      showModal = false;
+      router.push("/cart");
+    };
+    onMounted(() => {
+      init();
+    });
+    return {
+      slideList,
+      menuList,
+      adsList,
+      phoneList,
+      showModal,
+      init,
+      addCart,
+      updateModal,
+    };
   },
 };
 </script>

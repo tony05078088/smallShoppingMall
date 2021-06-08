@@ -30,7 +30,7 @@
             :key="i"
           >
             <div class="detail_left">
-              <img v-lazy="singleitem.productImage" alt="" />
+              <img :src="singleitem.productImage" alt="" />
               <div class="detail_item">
                 <div>{{ singleitem.productName }}</div>
                 <div>

@@ -29,12 +29,12 @@
         <img src="/imgs/product/product-bg-3.png" alt="" />
       </div>
       <div class="item_bg_4">
-        <swiper :options="swiperOptions">
+        <!-- <swiper :options="swiperOptions">
           <swiper-slide v-for="(item, index) in slideList" :key="index">
             <img :src="item.img" />
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
+        </swiper> -->
       </div>
       <div class="item_video">
         <h3>60FPS 超慢動作攝影</h3>
@@ -61,14 +61,14 @@
 
 <script>
 import ProductParam from "../components/ProductParam";
-import {Swiper, SwiperSlide} from "vue-awesome-swiper";
-import "swiper/css/swiper.css";
+//import {Swiper, SwiperSlide} from "vue-awesome-swiper";
+//import "swiper/css/swiper.css";
 export default {
   name: "product",
   components: {
     ProductParam,
-    Swiper,
-    SwiperSlide,
+    // Swiper,
+    // SwiperSlide,
   },
   data() {
     return {

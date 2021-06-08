@@ -4,12 +4,12 @@
     <div class="container">
       <div class="wrapper">
         <div class="item_pic">
-          <swiper :options="swiperOptions">
+          <!-- <swiper :options="swiperOptions">
             <swiper-slide v-for="(item, index) in 4" :key="index">
               <img :src="`/imgs/detail/phone-${item}.jpg`" />
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
-          </swiper>
+          </swiper> -->
         </div>
         <div class="item_info">
           <h3>{{ product.name }}</h3>
@@ -95,27 +95,14 @@
 
 <script>
 import ProductParam from "../components/ProductParam";
-import {Swiper, SwiperSlide} from "vue-awesome-swiper";
-import "swiper/css/swiper.css";
 export default {
   name: "detail",
   components: {
     ProductParam,
-    Swiper,
-    SwiperSlide,
   },
   data() {
     return {
       id: this.$route.params.id,
-      swiperOptions: {
-        autoplay: true,
-        loop: true,
-        slidesPerView: 1,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-      },
       product: {},
       version: 1,
     };

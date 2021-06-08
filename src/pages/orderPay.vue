@@ -46,7 +46,7 @@
               v-for="(item, index) in orderDetail"
               :key="index"
             >
-              <img class="logoPic" v-lazy="item.productImage" alt="" />
+              <img class="logoPic" :src="item.productImage" alt="" />
 
               {{ item.productName }}</span
             >
