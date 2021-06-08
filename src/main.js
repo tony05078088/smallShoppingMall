@@ -7,8 +7,9 @@ import App from "./App.vue";
 //import env from "./env";
 import router from "./router";
 import store from "./store";
-// 掛載axios到vue實例上
+// 掛載axios到vue實例上(Vue2)
 //Vue.prototype.axios = axios;
+
 //根據前端跨域方式做調整 Ex: /a/b  :  /api/a/b => /a/b
 axios.defaults.baseURL = "/api";
 axios.defaults.timeout = 8000;
@@ -48,10 +49,12 @@ axios.interceptors.response.use(
   }
 );
 
-// Vue.use(VueLazyLoad, {
-//   loading: "/imgs/loading-svg/loading-bars.svg",
-// });
-createApp(App)
+const app = createApp(App);
+
+//等同於Vue2的Vue.prototype.$axios = axios;
+app.config.globalProperties.$axios = axios;
+
+app
   .use(Antd)
   .use(router)
   .use(store)

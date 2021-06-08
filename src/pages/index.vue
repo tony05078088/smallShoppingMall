@@ -128,10 +128,7 @@
 <script>
 import ServiceBar from "../components/ServiceBar";
 import Modal from "../components/Modal";
-import axios from "axios";
-import {useStore} from "vuex";
-import {onMounted, reactive, ref} from "vue";
-import {useRouter} from "vue-router";
+import {getCurrentInstance,reactive,ref,onMounted} from "vue";
 export default {
   name: "index",
   components: {
@@ -139,8 +136,7 @@ export default {
     Modal,
   },
   setup() {
-    let store = useStore();
-    let router = useRouter();
+    const {ctx} = getCurrentInstance();
     let slideList = reactive([
       {
         id: "42",
@@ -212,8 +208,8 @@ export default {
     ]);
     let phoneList = reactive([]);
     let showModal = ref(false);
-    const init = async () => {
-      axios
+    const init =  () => {
+      ctx.$axios
         .get("products", {
           params: {
             categoryId: 100012,
@@ -224,35 +220,22 @@ export default {
           // slice不會影響原array,splice會影響
           res.list = res.list.slice(6, 14);
           phoneList.value = [res.list.slice(0, 4), res.list.slice(4, 8)];
-          console.log(phoneList);
         })
         .catch(err => {
           console.log(err);
         });
-      // res.list = res.list.slice(6, 14);
-      // console.log(res.list);
-      // phoneList.value = [res.list.slice(0, 4), res.list.slice(4, 8)];
     };
     const addCart = async id => {
-      const res = await axios.post("/carts", {
+      const res = await ctx.$axios.post("/carts", {
         productId: id,
         selected: true,
       });
-      // .then(res => {
-      //   console.log(res);
-      //   showModal = true;
-      //   store.dispatch("saveCartCount", res.cartTotalQuantity);
-      // })
-      // .catch(err => {
-      //   console.log(err);
-      //   showModal = true;
-      // });
       showModal = true;
-      store.dispatch("saveCartCount", res.cartTotalQuantity);
+      ctx.$store.dispatch("saveCartCount", res.cartTotalQuantity);
     };
     const updateModal = () => {
       showModal = false;
-      router.push("/cart");
+      ctx.$router.push("/cart");
     };
     onMounted(() => {
       init();

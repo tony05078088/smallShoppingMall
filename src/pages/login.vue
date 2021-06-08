@@ -40,22 +40,27 @@
 </template>
 
 <script>
-import {ref} from "vue";
-import {useStore} from "vuex";
-import {message} from "ant-design-vue";
-import {useRouter} from "vue-router";
+import {getCurrentInstance, ref} from "vue";
 import cookie from "vue-cookie";
-import axios from "axios";
 export default {
   name: "login",
+  props: {
+    uname: {
+      type: String,
+      default: "Jack",
+    },
+  },
   setup() {
+    const {ctx} = getCurrentInstance();
+    console.log(ctx); //即為Vue2的根實例
     let username = ref("");
     let password = ref("");
     let userId = ref("");
-    let store = useStore();
-    let router = useRouter();
+    let store = ctx.$store;
+    let router = ctx.$router;
+
     const login = () => {
-      axios
+      ctx.$axios
         .post("/user/login", {
           username: username.value,
           password: password.value,
@@ -80,7 +85,7 @@ export default {
         });
     };
     const register = () => {
-      axios
+      ctx.$axios
         .post("/user/register", {
           username: "tony",
           password: "123456",
@@ -88,7 +93,7 @@ export default {
         })
         .then(res => {
           console.log(res);
-          message.info("註冊成功");
+          ctx.$message.info("註冊成功");
         })
         .catch(err => {
           console.log(err);

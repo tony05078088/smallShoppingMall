@@ -29,12 +29,11 @@
         <img src="/imgs/product/product-bg-3.png" alt="" />
       </div>
       <div class="item_bg_4">
-        <!-- <swiper :options="swiperOptions">
-          <swiper-slide v-for="(item, index) in slideList" :key="index">
-            <img :src="item.img" />
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper> -->
+        <a-carousel autoplay>
+          <div v-for="(item, index) in slideList" :key="index">
+            <a :href="'/#/product/' + item.id"><img :src="item.img"/></a>
+          </div>
+        </a-carousel>
       </div>
       <div class="item_video">
         <h3>60FPS 超慢動作攝影</h3>
@@ -61,74 +60,65 @@
 
 <script>
 import ProductParam from "../components/ProductParam";
-//import {Swiper, SwiperSlide} from "vue-awesome-swiper";
-//import "swiper/css/swiper.css";
+import {getCurrentInstance, ref, onMounted} from "vue";
 export default {
   name: "product",
   components: {
     ProductParam,
-    // Swiper,
-    // SwiperSlide,
   },
-  data() {
-    return {
-      product: {}, //商品訊息
-      showSlide: "", //控制動畫效果
-      swiperOptions: {
-        autoplay: true,
-        loop: true,
-        slidesPerView: 3,
-        spaceBetween: 30,
-        freeMode: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
+  setup() {
+    let {ctx} = getCurrentInstance();
+    let product = ref({}); //商品訊息
+    let showSlide = ref(""); //控制動畫效果
+    let slideList = [
+      {
+        id: "42",
+        img: "/imgs/product/gallery-2.png",
       },
-      slideList: [
-        {
-          id: "42",
-          img: "/imgs/product/gallery-2.png",
-        },
-        {
-          id: "45",
-          img: "/imgs/product/gallery-3.png",
-        },
-        {
-          id: "46",
-          img: "/imgs/product/gallery-4.png",
-        },
-        {
-          id: "",
-          img: "/imgs/product/gallery-5.jpg",
-        },
-        {
-          id: "",
-          img: "/imgs/product/gallery-6.jpg",
-        },
-      ],
-    };
-  },
-  methods: {
-    closeMusic() {
-      this.showSlide = "slideUp";
+      {
+        id: "45",
+        img: "/imgs/product/gallery-3.png",
+      },
+      {
+        id: "46",
+        img: "/imgs/product/gallery-4.png",
+      },
+      {
+        id: "",
+        img: "/imgs/product/gallery-5.jpg",
+      },
+      {
+        id: "",
+        img: "/imgs/product/gallery-6.jpg",
+      },
+    ];
+    const closeMusic = () => {
+      showSlide = "slideUp";
       let vi = document.getElementsByTagName("video")[0];
       vi.pause();
-    },
-    getProductInfo() {
-      let id = this.$route.params.id;
-      this.axios.get(`/products/${id}`).then(res => {
+    };
+    const getProductInfo = () => {
+      let id = ctx.$route.params.id;
+      ctx.$axios.get(`/products/${id}`).then(res => {
         console.log(res);
-        this.product = res;
+        product.value = res;
       });
-    },
-    buy() {
-      let id = this.$route.params.id;
-      this.$router.push(`/detail/${id}`);
-    },
-  },
-  mounted() {
-    this.getProductInfo();
+    };
+    const buy = () => {
+      let id = ctx.$route.params.id;
+      ctx.$router.push(`/detail/${id}`);
+    };
+    onMounted(() => {
+      getProductInfo();
+    });
+    return {
+      product,
+      slideList,
+      showSlide,
+      closeMusic,
+      getProductInfo,
+      buy,
+    };
   },
 };
 </script>
@@ -193,11 +183,6 @@ export default {
       img {
         width: 100%;
         max-width: 100%;
-      }
-    }
-    .swiper-container {
-      img {
-        width: 100%;
       }
     }
     .item_video {

@@ -35,7 +35,7 @@
                   v-for="(item, index) in phoneList.value"
                   :key="index"
                 >
-                  <a :href="'/#/product' + item.id" target="_blank">
+                  <a :href="'/#/product/' + item.id" target="_blank">
                     <div class="pro-img">
                       <img :src="item.mainImage" :alt="item.subtitle" />
                     </div>
@@ -123,40 +123,32 @@
 </template>
 
 <script>
-import {reactive, computed, onMounted} from "vue";
-// import {reactive} from "@vue/reactivity";
-// import { computed, onMounted } from '@vue/runtime-core';
-import axios from "axios";
-import {useStore} from "vuex";
-import {useRouter, useRoute} from "vue-router";
+import {reactive, computed, onMounted, getCurrentInstance} from "vue";
 import cookie from "vue-cookie";
-import {message} from "ant-design-vue";
 export default {
   name: "nav-header",
   setup() {
-    let store = useStore();
-    let router = useRouter();
-    let route = useRoute();
+    const {ctx} = getCurrentInstance();
     let phoneList = reactive([]);
     let username = computed(() => {
-      return store.state.username;
+      return ctx.$store.state.username;
     });
     let cartCount = computed(() => {
-      return store.state.cartCount;
+      return ctx.$store.state.cartCount;
     });
     //mounted hooks
     onMounted(() => {
       getProductList();
-      let params = route.params;
+      let params = ctx.$route.params;
       if (params && params.from == "login") {
         getCartCount();
       }
     });
     const login = () => {
-      router.push("/login");
+      ctx.$router.push("/login");
     };
     const getProductList = () => {
-      axios
+      ctx.$axios
         .get("/products", {
           params: {
             categoryId: 100012,
@@ -175,21 +167,21 @@ export default {
         });
     };
     const goToCart = () => {
-      router.push("/cart");
+      ctx.$router.push("/cart");
     };
     const logout = () => {
-      axios.post("/user/logout").then(() => {
-        message("登出成功");
+       ctx.$axios.post("/user/logout").then(() => {
+        ctx.$message("登出成功");
         // 將cookie的值設為空
         cookie.set("userId", "", {expires: "-1"});
         //將人名及購物車數量清空
-        store.commit("saveUserName", "");
-        store.commit("saveCartCount", 0);
+        ctx.$store.commit("saveUserName", "");
+        ctx.$store.commit("saveCartCount", 0);
       });
     };
     const getCartCount = () => {
-      axios.get("/carts/products/sum").then((res = 0) => {
-        store.commit("saveCartCount", res);
+       ctx.$axios.get("/carts/products/sum").then((res = 0) => {
+        ctx.$store.commit("saveCartCount", res);
       });
     };
     return {
