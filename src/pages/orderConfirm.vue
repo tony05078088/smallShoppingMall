@@ -479,4 +479,33 @@ export default {
     }
   }
 }
+
+@include respond(phone) {
+  .OrderConfirm {
+    .wrapper {
+      .container {
+        .order_box {
+          .address_box {
+            .address {
+              span {
+                width: auto;
+              }
+            }
+          }
+          .total {
+            .item {
+              span {
+                &:last-child {
+                  white-space: nowrap;
+                  min-width: 40px;
+                  width: 20%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

@@ -35,7 +35,7 @@
                   v-for="(item, index) in phoneList"
                   :key="index"
                 >
-                  <a :href="'/#/product' + item.id" target="_blank">
+                  <a :href="'/#/product/' + item.id" target="_blank">
                     <div class="pro-img">
                       <img v-lazy="item.mainImage" :alt="item.subtitle" />
                     </div>
@@ -260,7 +260,7 @@ export default {
             top: 112px;
             left: 0;
             width: 100%;
-            height: 0;
+            height: 10%;
             opacity: 0;
             overflow: hidden;
             transition: all 0.2s;
@@ -337,9 +337,9 @@ export default {
   }
 }
 
-@media (max-width: 480px) {
+@include respond(phone) {
   .header {
-    font-size: 8px;
+    font-size: 0.25rem;
     .nav-topbar {
       .container {
         height: 100%;
@@ -347,23 +347,23 @@ export default {
           width: 56%;
           height: 100%;
           a {
-            font-size: 8px;
             margin-right: 0.5%;
           }
         }
         .topbar-user {
           display: flex;
-          text-align: right;
+          justify-content: flex-end;
           width: 50%;
           height: 100%;
           a {
-            font-size: 8px;
-            margin-right: 0.5%;
+            //min-width: 25px;
+            margin-right: 2.5%;
             &.my-cart {
-               width: 25%;
-               height: 100%;
+              width: 60%;
+              height: 100%;
               .icon-cart {
-                width: 100%;
+                width: 25%;
+                margin-right: 1.5%;
               }
             }
           }
@@ -375,16 +375,74 @@ export default {
       height: 50%;
       .container {
         height: 30%;
+        .header-logo {
+          width: 25px;
+          height: 25px;
+          a {
+            //width: 110px;
+            &:before {
+              @include bgImg(25px, 25px, "/imgs/mi-logo.png", 25px);
+              content: " ";
+              transition: margin 0.2s;
+            }
+            &:after {
+              @include bgImg(25px, 25px, "/imgs/mi-home.png");
+              content: " ";
+            }
+            &:hover:before {
+              margin-left: -55px;
+              //可指定特定屬性進行過渡
+              transition: margin 0.2s;
+            }
+          }
+        }
         .header-menu {
           width: 80%;
+          padding-left: 5%;
           .item-menu {
-            font-size: 8px;
-            margin-right: 0.5%;
+            margin-right: 2.5%;
+            font-size: 0.5rem;
+            &:hover {
+              .children {
+                height: auto;
+                top: 1%;
+                opacity: 1;
+              }
+            }
+            .children {
+              height: auto;
+              opacity: 0;
+              .product {
+                height: auto;
+                width: (100%/6);
+                a {
+                  width: 100%;
+                  .pro-img {
+                    height: auto;
+                    img {
+                      height: 50px;
+                      margin-top: 0.5rem;
+                    }
+                  }
+                  .pro-name {
+                    width: 100%;
+                    margin: 2% 0 1% 0;
+                    font-size: 10px;
+                  }
+                }
+              }
+            }
           }
         }
         .header-search {
           width: 30%;
           height: 30%;
+          .wrapper {
+            height: 100%;
+            input {
+              height: 100%;
+            }
+          }
         }
       }
     }

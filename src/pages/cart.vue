@@ -173,7 +173,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "../assets/scss/mixin.scss";
 .cart {
   .wrapper {
     height: auto;
@@ -334,6 +335,45 @@ export default {
               margin: auto;
             }
           }
+        }
+      }
+    }
+  }
+}
+
+@include respond(phone) {
+  .cart {
+    .wrapper {
+      .items_box {
+        .cart-Items {
+          .cart-Item {
+            min-height: 75px;
+            .item_name {
+              img {
+                height: 30%;
+              }
+              span {
+                font-size: 2rem;
+                padding: 2% 0;
+              }
+            }
+            .item_quantity {
+              .number_box {
+                height: 80%;
+                line-height: 20px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+              }
+            }
+          }
+        }
+      }
+      .order_wrap {
+        font-size: 1rem;
+        .item_wrap_left,
+        .item_wrap_right {
+          font-size: inherit;
         }
       }
     }

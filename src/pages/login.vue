@@ -187,4 +187,23 @@ export default {
     background-color: $colorG;
   }
 }
+
+@include respond(phone) {
+  .login {
+    .wrapper {
+      height: 600px;
+      background-size: cover;
+      .login_form {
+        width: 60%;
+        height: 40%;
+        top: 35%;
+        h3 {
+          width: 85%;
+          font-size: 3rem;
+          margin: 0 auto 5% auto;
+        }
+      }
+    }
+  }
+}
 </style>

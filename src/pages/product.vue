@@ -290,4 +290,39 @@ export default {
     }
   }
 }
+@include respond(phone) {
+  .product {
+    .content {
+      .item_bg {
+        .all_details {
+          div {
+            &.title {
+              font-size: 4rem;
+            }
+            &.description {
+              font-size: 2.5rem;
+            }
+            &.feature {
+              font-size: 2rem;
+              width: 100%;
+            }
+            &.price {
+              padding-top: 1%;
+              font-size: 3rem;
+            }
+          }
+        }
+      }
+      .item_video {
+        h3 {
+          padding: 2% 10% 1% 10%;
+        }
+        p {
+          margin-top: 1.5%;
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+}
 </style>

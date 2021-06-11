@@ -41,10 +41,6 @@
               <div class="children"></div>
             </li>
             <li class="menu-item">
-              <a href="javascript:;">智能 路由器</a>
-              <div class="children"></div>
-            </li>
-            <li class="menu-item">
               <a href="javascript:;">電源 配件</a>
               <div class="children"></div>
             </li>
@@ -305,7 +301,7 @@ export default {
             height: 50%;
             margin: auto 0;
             padding-left: 15%;
-            font-size: 1rem;
+            //font-size: 1rem;
             color: #ffffff;
             &:after {
               position: absolute;
@@ -423,7 +419,7 @@ export default {
             .item {
               //width: 236px;
               width: 25%;
-              height: 302px;
+              height: 330px;
               background-color: $colorG;
               text-align: center;
               span {
@@ -476,6 +472,88 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+}
+
+@include respond(phone) {
+  .index {
+    .swiper-box {
+      position: relative;
+      height: 100%;
+      .nav-menu {
+        top: 1%;
+        left: 0;
+        width: 30%;
+        height: 95%;
+        .menu-wrap {
+          justify-content: flex-start;
+          .menu-item {
+            flex: 1;
+            height: (100%/8);
+            .children {
+              width: 200%;
+            }
+          }
+        }
+      }
+      .swiper-container {
+        height: auto;
+        .swiper-button-prev {
+          position: absolute;
+          left: 35%;
+        }
+      }
+    }
+    .product-box {
+      .container {
+        .wrapper {
+          .banner-left {
+            width: 40%;
+            //height: 200px;
+            a {
+              height: 100%;
+              img {
+                width: 100%;
+              }
+            }
+          }
+          .list-box {
+            width: 60%;
+            .list {
+              .item {
+                width: 25%;
+                height: 200px;
+                span {
+                  width: 100%;
+                  height: 10%;
+                }
+                .item-info {
+                  height: 60%;
+                  h3 {
+                    height: 40%;
+                    font-size: 1.5rem;
+                    margin: 2px auto;
+                  }
+                  p {
+                    height: 40%;
+                  }
+                  .price {
+                    font-size: 1rem;
+                    margin-top: 40%;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .service {
+      ul {
+        display: flex;
+        flex-wrap: nowrap;
       }
     }
   }

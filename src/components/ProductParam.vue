@@ -107,4 +107,41 @@ export default {
     }
   }
 }
+
+@include respond(phone) {
+  .nav-bar {
+    .container {
+      height: 100%;
+      .pro-title {
+        height: 100%;
+      }
+      .pro-param {
+        width: 50%;
+        .param_box {
+          height: 100%;
+          span {
+            height: 100%;
+            white-space: nowrap;
+            vertical-align: middle;
+            &:not(:last-child) {
+              &:after {
+                position: absolute;
+                top: 50%;
+                right: -2.5%;
+                transform: translate(-50%, -50%);
+                content: "";
+                height: 10px;
+                border: 0.3px solid $colorD;
+              }
+            }
+          }
+          .btn {
+            height: 100%;
+            //line-height: 25px;
+          }
+        }
+      }
+    }
+  }
+}
 </style>

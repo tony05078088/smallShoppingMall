@@ -33,19 +33,29 @@ export default {
       width: 20px;
       height: 20px;
       vertical-align: middle;
-      margin-right: 8px
+      margin-right: 8px;
     }
     .icon-setting {
-      @include bgImg(20px, 20px, '../../public/imgs/icon-setting.png');
+      @include bgImg(20px, 20px, "../../public/imgs/icon-setting.png");
     }
     .icon-7day {
-      @include bgImg(20px, 20px, '../../public/imgs/icon-7day.png');
+      @include bgImg(20px, 20px, "../../public/imgs/icon-7day.png");
     }
     .icon-15day {
-      @include bgImg(20px, 20px, '../../public/imgs/icon-15day.png');
+      @include bgImg(20px, 20px, "../../public/imgs/icon-15day.png");
     }
     .icon-free {
-      @include bgImg(20px, 20px, '../../public/imgs/icon-post.png');
+      @include bgImg(20px, 20px, "../../public/imgs/icon-post.png");
+    }
+  }
+}
+@include respond(phone) {
+  .service {
+    .container {
+      ul {
+        display: flex;
+        flex-wrap: no-wrap;
+      }
     }
   }
 }

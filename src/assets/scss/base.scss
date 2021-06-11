@@ -66,26 +66,20 @@ input {
   }
 }
 
-@media (max-width: 480px) {
-  .header-logo {
-    width: 25px;
-    height: 25px;
-      a {
-    //width: 110px;
-    &:before {
-      @include bgImg(25px, 25px, "/imgs/mi-logo.png", 25px);
-      content: " ";
-      transition: margin 0.2s;
-    }
-    &:after {
-      @include bgImg(25px, 25px, "/imgs/mi-home.png");
-      content: " ";
-    }
-    &:hover:before {
-      margin-left: -55px;
-      //可指定特定屬性進行過渡
-      transition: margin 0.2s;
-    }
+html {
+  //定義1 rem = 10px
+  font-size: 62.5%; // 1rem = 10px; 10px/16px = 62.5%
+  @include respond(big-desktop) {
+    font-size: 75%; // 1rem = 12px 12/16=75%
   }
+  @include respond(tab-land) {
+    font-size: 56.25%; // 1rem = 9px 9/16=56.25%
+  }
+  @include respond(tab-port) {
+    font-size: 50%; // 1rem = 8px 8/16 = 50%
+  }
+  @include respond(phone) {
+    font-size: 30%;
+
   }
 }

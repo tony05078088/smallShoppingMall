@@ -293,4 +293,27 @@ export default {
     }
   }
 }
+
+@include respond(phone) {
+  .orderlist {
+    .wrapper {
+      .container {
+        .order {
+          .order_title {
+            flex-direction: column;
+            .item_info_left {
+              flex-direction: column;
+            }
+            .item_info_right {
+              text-align: center;
+            }
+          }
+        }
+        .pagination {
+          text-align: left;
+        }
+      }
+    }
+  }
+}
 </style>

@@ -31,6 +31,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../assets/scss/mixin.scss";
 .order-header {
   width: 100%;
   padding: 3% 0%;
@@ -61,6 +62,35 @@ export default {
     a {
       color: #666666;
       font-size: 16px;
+    }
+  }
+}
+
+@include respond(phone) {
+  .order-header {
+    .container {
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .header-logo {
+        width: 50px;
+        height: 50px;
+      }
+      .title {
+        width: 90%;
+        height: 100%;
+        font-size: 1.5rem;
+        text-align: center;
+        h2 {
+          display: inline-block;
+          width: 100%;
+          span {
+            display: block;
+            font-size: 1rem;
+          }
+        }
+      }
     }
   }
 }
