@@ -189,6 +189,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../assets/scss/mixin.scss";
 .orderPay {
   width: 100%;
   background-color: #f5f5f5;
@@ -325,6 +326,35 @@ export default {
         }
         &.checked {
           border: 1px solid #ff6700;
+        }
+      }
+    }
+  }
+}
+@include respond(phone) {
+  .orderPay {
+    .messageBox {
+      .success {
+        .order-total {
+          font-size: 2rem;
+        }
+        .hiddenDetail {
+          div {
+            span {
+              width: 30%;
+            }
+          }
+        }
+      }
+    }
+    .platformBox {
+      .payway {
+        height: auto;
+        text-align: center;
+        .pay {
+          &.alipay {
+            margin-right: 0%;
+          }
         }
       }
     }

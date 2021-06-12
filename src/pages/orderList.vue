@@ -303,6 +303,13 @@ export default {
             flex-direction: column;
             .item_info_left {
               flex-direction: column;
+              text-align: center;
+              .time,
+              .name,
+              .no,
+              .pay {
+                width: 100%;
+              }
             }
             .item_info_right {
               text-align: center;

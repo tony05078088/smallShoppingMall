@@ -56,3 +56,11 @@
     }
   }
 }
+
+@include respond(phone) {
+  .modal {
+    .modal-dialog {
+      @include position(absolute, 40%, 50%, 100%, auto);
+    }
+  }
+}
