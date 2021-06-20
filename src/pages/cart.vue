@@ -309,7 +309,7 @@ export default {
       .item_wrap_right {
         width: 30%;
         display: flex;
-        justify-content: end;
+        justify-content:  flex-end;
         span {
           height: 50%;
           display: inline-block;
