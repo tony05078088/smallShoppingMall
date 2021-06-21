@@ -5,9 +5,9 @@
       <p>小米商城</p>
     </div>
     <div class="footer-link">
-      <a href="" target="_blank">河畔一角主頁</a><span>|</span>
-      <a href="" target="_blank">Vue全端課程</a><span>|</span>
-      <a href="" target="_blank">React全家桶</a><span>|</span>
+      <a href="" target="_blank">主頁</a><span>|</span>
+      <a href="" target="_blank">Vue課程</a><span>|</span>
+      <a href="" target="_blank">React課程</a><span>|</span>
       <a href="" target="_blank">微信支付</a>
     </div>
     <div class="CopyRight">
