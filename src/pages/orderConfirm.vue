@@ -326,7 +326,9 @@ export default {
               margin-bottom: 5%;
             }
             span {
-              @include bgImg(21%, auto, "");
+              display: inline-block;
+              width: 21%;
+              height: auto;
               box-sizing: border-box;
               border: 1px solid #e5e5e5;
               margin-right: 1%;
@@ -354,7 +356,7 @@ export default {
                   height: 50px;
                   margin: 0 auto;
                   cursor: pointer;
-                  background: url("/imgs/icon-add.png") 50% center no-repeat
+                  background: url("/imgs/icon-add.png") 50% center
                     rgb(224, 224, 224);
                 }
                 span {
