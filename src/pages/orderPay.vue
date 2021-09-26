@@ -149,6 +149,7 @@ export default {
             console.log(res);
             QRCode.toDataURL(res.content)
               .then(url => {
+                console.log(url);
                 this.showPay = true;
                 this.QRCodeImg = url;
                 this.loopOrderState();

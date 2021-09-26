@@ -124,36 +124,6 @@
         </p>
       </template>
     </modal>
-    <modal
-      title="Aiplux"
-      confirmText="確定修改title"
-      btnType="1"
-      modalType="middle"
-      :showModal="showModal"
-      @updateModal="modifyTitle(value)"
-      @cancel="showModal = false"
-    >
-      <template v-slot:body>
-        <el-select
-          v-model="value"
-          @change="showMessage($event)"
-          placeholder="请选择"
-          filterable
-        >
-          <el-option
-            v-for="item in itemlist"
-            :key="item.id"
-            :label="item.title"
-            :value="item"
-          >
-          </el-option>
-        </el-select>
-        <div>Title: {{ value.title }}</div>
-        <div>Body: {{ value.body }}</div>
-        <div>UserId: {{ value.userId }}</div>
-        <input type="text" v-model="value.title" />
-      </template>
-    </modal>
   </div>
 </template>
 
@@ -161,8 +131,8 @@
 import ServiceBar from '../components/ServiceBar'
 import Modal from '../components/Modal'
 import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
-import axios from 'axios'
 import 'swiper/css/swiper.css'
+import axios from 'axios'
 export default {
   name: 'index',
   components: {
@@ -262,9 +232,7 @@ export default {
         },
       ],
       phoneList: [],
-      showModal: true,
-      value: '',
-      options: '',
+      showModal: false,
     }
   },
   methods: {
@@ -320,41 +288,11 @@ export default {
         .get('https://jsonplaceholder.typicode.com/posts')
         .then(res => {
           console.log(res)
-          this.$store.commit('saveListItem', res)
+         // this.$store.dispatch('saveListItem',res)
         })
         .catch(err => {
           console.log(err)
         })
-    },
-    modifyTitle() {
-      this.showModal = false
-      let modifyiedObj = {
-        id: this.options.id,
-        title: this.value,
-        body: this.options.body,
-        userId: this.options.userId,
-      }
-      axios.put(
-        `https://jsonplaceholder.typicode.com/posts/${this.options.id}`,
-        modifyiedObj
-      )
-      this.$store
-        .commit('modifyTitle', modifyiedObj)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    showMessage(e) {
-      console.log(e)
-      this.options = e
-    },
-  },
-  computed: {
-    itemlist() {
-      return this.$store.state.listitem
     },
   },
   mounted() {

@@ -40,72 +40,71 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions} from 'vuex'
 export default {
-  name: "login",
+  name: 'login',
   //data宣告為一個function,避免頁面之間及組件之間數據 全局的竄用
   data() {
     return {
-      username: "",
-      password: "",
-      userId: "",
-    };
+      username: '',
+      password: '',
+      userId: '',
+    }
   },
   methods: {
     // saveUserName === this.$store.dispatch('saveUserName)
-    ...mapActions(["saveUserName"]),
+    ...mapActions(['saveUserName']),
     login() {
       // 因變量掛載在Vue實例上,可使用解構
-      let {username, password} = this;
+      let {username, password} = this
       this.axios
-        .post("/user/login", {
+        .post('/user/login', {
           username,
           password,
         })
         .then(res => {
-          console.log(res);
-          this.$cookie.set("userId", res.id, {
-            expires: "Session",
-          });
+          console.log(res)
           //todo: 保存使用者名稱
-          //this.$store.dispatch("saveUserName", res.username);
-          this.saveUserName(res.username);
+          this.$store.dispatch('saveUserName', res.data.user.username)
+          localStorage.setItem('username', res.data.user.username)
+          localStorage.setItem('token', res.token)
+          // this.saveUserName(res.username);
           this.$router.push({
             // path:'/index',
             //query傳參數用path,params傳參要用name,對應的是路由的名稱
-            name: "index",
+            name: 'index',
             params: {
-              from: "login",
+              from: 'login',
             },
-          });
+          })
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     register() {
       this.axios
-        .post("/user/register", {
-          username: "tony",
-          password: "123456",
-          email: "tony@tony.com",
+        .post('/user/register', {
+          username: 'tony',
+          password: '123456',
+          email: 'tony@tony.com',
         })
         .then(res => {
-          console.log(res);
-          this.$message.info("註冊成功");
+          console.log(res)
+          this.$message.info('註冊成功')
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
-@import "./../assets/scss/base.scss";
-@import "./../assets/scss/config.scss";
-@import "./../assets/scss/button.scss";
+@import './../assets/scss/base.scss';
+@import './../assets/scss/config.scss';
+@import './../assets/scss/button.scss';
 
 .login {
   width: 100%;
@@ -119,7 +118,7 @@ export default {
     position: relative;
     width: 100%;
     height: 600px;
-    background: url("/imgs/login-bg.jpg") no-repeat center;
+    background: url('/imgs/login-bg.jpg') no-repeat center;
     .login_form {
       position: absolute;
       top: 10%;
@@ -146,7 +145,7 @@ export default {
               position: absolute;
               right: 55%;
               transform: translate(-50%, -50%);
-              content: "";
+              content: '';
               height: 4%;
               border: 1px solid black;
             }

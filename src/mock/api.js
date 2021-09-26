@@ -1,13 +1,12 @@
-import Mock from "mockjs";
-Mock.mock("/api/user/login", {
-  status: 0,
+import Mock from 'mockjs'
+Mock.mock('/api/user/login', {
   data: {
-    "id|1-3": 0,
-    username: "@name",
-    email: "admin@51purse.com",
-    phone: null,
-    role: 0,
-    createTime: 1479048325000,
-    updateTime: 1479048325000,
+    user: {
+      id: 1,
+      username: 'test',
+      email: 'test@aiplux.com',
+    },
+    token: 'fake-token',
   },
-});
+  status: 200,
+})

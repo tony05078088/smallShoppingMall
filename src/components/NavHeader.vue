@@ -147,10 +147,10 @@ export default {
     },
   },
   mounted() {
-    this.getProductList();
+   // this.getProductList();
     let params = this.$route.params;
     if (params && params.from == "login") {
-      this.getCartCount();
+     // this.getCartCount();
     }
   },
   methods: {
